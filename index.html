@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Number Systems Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            margin: 5px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #6c757d, #495057);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .card h2 {
+            color: #7c3aed;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .card h3 {
+            color: #6366f1;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        /* Grid Layouts */
+        .grid {
+            display: grid;
+            gap: 30px;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #7c2d12;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #7c3aed;
+        }
+
+        .info-box h3 {
+            color: #7c2d12;
+            margin-bottom: 10px;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: linear-gradient(135deg, #fef3c7, #fed7aa);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #f59e0b;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1.1rem;
+            border: 2px solid #d1d5db;
+            border-radius: 10px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1.1rem;
+            border: 2px solid #d1d5db;
+            border-radius: 10px;
+            background: white;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .btn-add { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        .btn-subtract { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+        .btn-multiply { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+        .btn-divide { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+
+        /* Result Cards */
+        .result-card {
+            background: linear-gradient(135deg, #2d1b69, #11998e);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 15px 0;
+            box-shadow: 0 8px 25px rgba(45, 27, 105, 0.3);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .result-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .result-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .result-number {
+            font-size: 2rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        .result-explanation {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        /* Step Cards */
+        .step-card {
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 10px 0;
+        }
+
+        /* Learning Sections */
+        .learn-section {
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #6366f1;
+            margin: 20px 0;
+        }
+
+        .learn-section h3 {
+            color: #3730a3;
+            margin-bottom: 15px;
+        }
+
+        .learn-section p {
+            margin-bottom: 10px;
+        }
+
+        .learn-subsection {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .learn-subsection h4 {
+            color: #374151;
+            margin-bottom: 10px;
+        }
+
+        /* Code Display */
+        .code-display {
+            background: #1f2937;
+            color: #10b981;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        /* Reference Table */
+        .reference-table {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .table-cell {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #e5e7eb;
+        }
+
+        .table-header {
+            background: #6366f1;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Practice Sections */
+        .practice-section {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #f59e0b;
+            margin: 20px 0;
+        }
+
+        .practice-section h3 {
+            color: #92400e;
+            margin-bottom: 15px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .tab-nav {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                margin: 5px 0;
+            }
+
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .result-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .result-number {
+                font-size: 1.5rem;
+                margin-top: 10px;
+            }
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .mb-20 { margin-bottom: 20px; }
+        .mt-20 { margin-top: 20px; }
+        .font-mono { font-family: 'Courier New', monospace; }
+        .font-bold { font-weight: bold; }
+        .text-sm { font-size: 0.9rem; }
+        .space-y > * + * { margin-top: 10px; }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-content.active {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Number Systems</h1>
+            <p>Learn how numbers work in different systems - made simple!</p>
+        </div>
+        
+        <!-- Tab Navigation -->
+        <div class="tab-nav">
+            <button onclick="showTab('convert')" class="tab-btn active">🔄 Convert Numbers</button>
+            <button onclick="showTab('learn')" class="tab-btn">📖 Learn Basics</button>
+            <button onclick="showTab('practice')" class="tab-btn">🧮 Practice Math</button>
+            <button onclick="showTab('codes')" class="tab-btn">🔤 Special Codes</button>
+        </div>
+
+        <!-- Convert Numbers Tab -->
+        <div id="convert" class="tab-content active">
+            <div class="card">
+                <h2>🔄 Number Converter</h2>
+                
+                <div class="info-box">
+                    <h3>💡 How it works:</h3>
+                    <p>Enter any number below and see how it looks in all different number systems! Each system uses different symbols to represent the same value.</p>
+                </div>
+                
+                <div class="grid grid-2">
+                    <!-- Input Section -->
+                    <div class="input-section">
+                        <h3>📝 Enter Your Number</h3>
+                        
+                        <div class="form-group">
+                            <label>Type your number here:</label>
+                            <input type="text" id="inputNumber" placeholder="Try: 42" class="form-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>What type of number is this?</label>
+                            <select id="inputBase" class="form-select">
+                                <option value="10">🔢 Regular Number (like 42)</option>
+                                <option value="2">💻 Binary (like 1010)</option>
+                                <option value="8">🎯 Octal (like 52)</option>
+                                <option value="16">🔥 Hex (like 2A)</option>
+                            </select>
+                        </div>
+                        
+                        <button onclick="convertNumber()" class="btn btn-primary btn-full">
+                            ✨ Convert to All Systems
+                        </button>
+                    </div>
+                    
+                    <!-- Results Section -->
+                    <div>
+                        <h3>🎯 Results in All Systems</h3>
+                        
+                        <!-- Regular Number -->
+                        <div class="result-card">
+                            <div class="result-header">
+                                <div>
+                                    <div class="result-title">🔢 Regular Number</div>
+                                    <div class="result-subtitle">The way we normally count</div>
+                                </div>
+                                <div class="result-number" id="decimalResult">-</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Binary -->
+                        <div class="result-card">
+                            <div class="result-header">
+                                <div>
+                                    <div class="result-title">💻 Binary (Computer Language)</div>
+                                    <div class="result-subtitle">Only uses 0s and 1s</div>
+                                </div>
+                                <div class="result-number" id="binaryResult">-</div>
+                            </div>
+                            <div class="result-explanation" id="binarySteps">Enter a number to see how it converts!</div>
+                        </div>
+                        
+                        <!-- Octal -->
+                        <div class="result-card">
+                            <div class="result-header">
+                                <div>
+                                    <div class="result-title">🎯 Octal</div>
+                                    <div class="result-subtitle">Uses digits 0-7</div>
+                                </div>
+                                <div class="result-number" id="octalResult">-</div>
+                            </div>
+                            <div class="result-explanation" id="octalSteps">Enter a number to see how it converts!</div>
+                        </div>
+                        
+                        <!-- Hexadecimal -->
+                        <div class="result-card">
+                            <div class="result-header">
+                                <div>
+                                    <div class="result-title">🔥 Hexadecimal</div>
+                                    <div class="result-subtitle">Uses 0-9 and A-F</div>
+                                </div>
+                                <div class="result-number" id="hexResult">-</div>
+                            </div>
+                            <div class="result-explanation" id="hexSteps">Enter a number to see how it converts!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Learn Basics Tab -->
+        <div id="learn" class="tab-content">
+            <div class="card">
+                <h2>📖 Understanding Number Systems</h2>
+                
+                <div class="space-y">
+                    <!-- Introduction -->
+                    <div class="learn-section">
+                        <h3>🎯 What Are Number Systems?</h3>
+                        <p>A number system is a way of representing numbers using a specific set of symbols. Different systems use different amounts of symbols and follow different rules.</p>
+                        <div class="learn-subsection">
+                            <h4>Key Concept - Base/Radix:</h4>
+                            <p>The "base" tells us how many different symbols the system uses. For example:</p>
+                            <ul>
+                                <li>Base-10 (Decimal) uses 10 symbols: 0,1,2,3,4,5,6,7,8,9</li>
+                                <li>Base-2 (Binary) uses 2 symbols: 0,1</li>
+                                <li>Base-8 (Octal) uses 8 symbols: 0,1,2,3,4,5,6,7</li>
+                                <li>Base-16 (Hex) uses 16 symbols: 0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Decimal System -->
+                    <div class="learn-section">
+                        <h3>🔢 Decimal System (Base-10)</h3>
+                        <p>This is the number system we use every day. It's called "decimal" because it uses 10 different symbols (digits).</p>
+                        
+                        <div class="learn-subsection">
+                            <h4>Why Base-10?</h4>
+                            <p>Humans likely developed base-10 because we have 10 fingers! It's natural for us to count in groups of 10.</p>
+                        </div>
+
+                        <div class="learn-subsection">
+                            <h4>Positional Value System:</h4>
+                            <p>Each position represents a power of 10:</p>
+                            <div class="code-display text-center">
+                                <div>Position: ... 10³ 10² 10¹ 10⁰</div>
+                                <div>Value: ... 1000 100 10 1</div>
+                                <div style="color: #8b5cf6; margin-top: 10px;">Example: 1234 = 1×1000 + 2×100 + 3×10 + 4×1</div>
+                            </div>
+                        </div>
+
+                        <div class="learn-subsection">
+                            <h4>Real-world uses:</h4>
+                            <ul>
+                                <li>Money and financial calculations</li>
+                                <li>Measurements (meters, kilograms, etc.)</li>
+                                <li>Time (minutes, seconds)</li>
+                                <li>Everyday counting and arithmetic</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Binary System -->
+                    <div class="learn-section">
+                        <h3>💻 Binary System (Base-2)</h3>
+                        <p>The foundation of all digital technology! Binary uses only two symbols: 0 and 1, representing OFF and ON states.</p>
+                        
+                        <div class="learn-subsection">
+                            <h4>Why Binary for Computers?</h4>
+                            <p>Electronic circuits can easily represent two states:</p>
+                            <ul>
+                                <li>0 = No electrical current (OFF)</li>
+                                <li>1 = Electrical current present (ON)</li>
+                            </ul>
+                            <p>This makes binary perfect for digital electronics!</p>
+                        </div>
+
+                        <div class="learn-subsection">
+                            <h4>Positional Value System:</h4>
+                            <p>Each position represents a power of 2:</p>
+                            <div class="code-display text-center">
+                                <div>Position: 2³ 2² 2¹ 2⁰</div>
+                                <div>Value: 8 4 2 1</div>
+                                <div style="color: #3b82f6; margin-top: 10px;">Example: 1010 = 1×8 + 0×4 + 1×2 + 0×1 = 10</div>
+                            </div>
+                        </div>
+
+                        <div class="learn-subsection">
+                            <h4>Real-world uses:</h4>
+                            <ul>
+                                <li>Computer processors and memory</li>
+                                <li>Digital communications</li>
+                                <li>Image and video encoding</li>
+                                <li>Internet protocols and data transmission</li>
+                                <li>Programming and software development</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Octal System -->
+                    <div class="learn-section">
+                        <h3>🎯 Octal System (Base-8)</h3>
+                        <p>Uses 8 symbols: 0, 1, 2, 3, 4, 5, 6, 7. Notice there's no 8 or 9 in octal!</p>
+                        
+                        <div class="learn-subsection">
+                            <h4>Why Octal?</h4>
+                            <p>Octal was popular in early computing because:</p>
+                            <ul>
+                                <li>8 = 2³, so each octal digit represents exactly 3 binary digits</li>
+                                <li>It's more compact than binary but easier to convert than decimal</li>
+                                <li>Early computers often used word sizes that were multiples of 3 bits</li>
+                            </ul>
+                        </div>
+
+                        <div class="learn-subsection">
+                            <h4>Positional Value System:</h4>
+                            <p>Each position represents a power of 8:</p>
+                            <div class="code-display text-center">
+                                <div>Position: 8³ 8² 8¹ 8⁰</div>
+                                <div>Value: 512 64 8 1</div>
+                                <div style="color: #10b981; margin-top: 10px;">Example: 123 = 1×64 + 2×8 + 3×1 = 83</div>
+                            </div>
+                        </div>
+
+                        <div class="learn-subsection">
+                            <h4>Real-world uses:</h4>
+                            <ul>
+                                <li>Unix/Linux file permissions (chmod 755)</li>
+                                <li>Some embedded systems programming</li>
+                                <li>Digital signal processing</li>
+                                <li>Legacy computer systems</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Hexadecimal System -->
+                    <div class="learn-section">
+                        <h3>🔥 Hexadecimal System (Base-16)</h3>
+                        <p>Uses 16 symbols: 0-9 for values 0-9, and A-F for values 10-15. It's like having extra "digits" beyond 9!</p>
+                        
+                        <div class="learn-subsection">
+                            <h4>Why Hexadecimal?</h4>
+                            <p>Hex is extremely popular in computing because:</p>
+                            <ul>
+                                <li>16 = 2⁴, so each hex digit represents exactly 4 binary digits</li>
+                                <li>Much more compact than binary (1 hex digit = 4 binary digits)</li>
+                                <li>Easy conversion to/from binary</li>
+                                <li>Perfect for representing byte values (1 byte = 2 hex digits)</li>
+                            </ul>
+                        </div>
+
+                        <div class="learn-subsection">
+                            <h4>Hex Digit Values:</h4>
+                            <div class="reference-table">
+                                <div class="table-cell">0=0</div>
+                                <div class="table-cell">1=1</div>
+                                <div class="table-cell">2=2</div>
+                                <div class="table-cell">3=3</div>
+                                <div class="table-cell">4=4</div>
+                                <div class="table-cell">5=5</div>
+                                <div class="table-cell">6=6</div>
+                                <div class="table-cell">7=7</div>
+                                <div class="table-cell">8=8</div>
+                                <div class="table-cell">9=9</div>
+                                <div class="table-cell" style="background: #fed7aa;">A=10</div>
+                                <div class="table-cell" style="background: #fed7aa;">B=11</div>
+                                <div class="table-cell" style="background: #fed7aa;">C=12</div>
+                                <div class="table-cell" style="background: #fed7aa;">D=13</div>
+                                <div class="table-cell" style="background: #fed7aa;">E=14</div>
+                                <div class="table-cell" style="background: #fed7aa;">F=15</div>
+                            </div>
+                        </div>
+
+                        <div class="learn-subsection">
+                            <h4>Positional Value System:</h4>
+                            <p>Each position represents a power of 16:</p>
+                            <div class="code-display text-center">
+                                <div>Position: 16² 16¹ 16⁰</div>
+                                <div>Value: 256 16 1</div>
+                                <div style="color: #f59e0b; margin-top: 10px;">Example: 1A3 = 1×256 + 10×16 + 3×1 = 419</div>
+                            </div>
+                        </div>
+
+                        <div class="learn-subsection">
+                            <h4>Real-world uses:</h4>
+                            <ul>
+                                <li>Web colors (#FF0000 = red, #00FF00 = green)</li>
+                                <li>Memory addresses in programming</li>
+                                <li>MAC addresses for network devices</li>
+                                <li>Assembly language programming</li>
+                                <li>Debugging and system programming</li>
+                                <li>Cryptography and hash functions</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Conversion Tips -->
+                    <div class="learn-section">
+                        <h3>💡 Quick Conversion Tips</h3>
+                        
+                        <div class="grid grid-2">
+                            <div class="learn-subsection">
+                                <h4>Binary ↔ Hex:</h4>
+                                <p>Group binary digits in sets of 4, each group = 1 hex digit</p>
+                                <p class="text-sm">1010 1100 = AC in hex</p>
+                            </div>
+                            
+                            <div class="learn-subsection">
+                                <h4>Binary ↔ Octal:</h4>
+                                <p>Group binary digits in sets of 3, each group = 1 octal digit</p>
+                                <p class="text-sm">101 011 = 53 in octal</p>
+                            </div>
+                            
+                            <div class="learn-subsection">
+                                <h4>Powers of 2:</h4>
+                                <p>2¹=2, 2²=4, 2³=8, 2⁴=16, 2⁵=32, 2⁶=64, 2⁷=128, 2⁸=256</p>
+                            </div>
+                            
+                            <div class="learn-subsection">
+                                <h4>Common Values:</h4>
+                                <p>255 = FF (hex) = 11111111 (binary) = 377 (octal)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Math Tab -->
+        <div id="practice" class="tab-content">
+            <!-- Basic Binary Math -->
+            <div class="card">
+                <h2>🧮 Practice Binary Math</h2>
+                
+                <div class="info-box">
+                    <h3>💡 What is Binary Math?</h3>
+                    <p>Just like regular math, but using only 0s and 1s! Computers do all their math this way.</p>
+                </div>
+                
+                <div class="grid grid-2">
+                    <div class="input-section">
+                        <h3>📝 Enter Binary Numbers</h3>
+                        
+                        <div class="form-group">
+                            <label>First number (only 0s and 1s):</label>
+                            <input type="text" id="binary1" placeholder="Try: 1010" class="form-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Second number (only 0s and 1s):</label>
+                            <input type="text" id="binary2" placeholder="Try: 1100" class="form-input">
+                        </div>
+                        
+                        <div class="btn-grid">
+                            <button onclick="binaryMath('add')" class="btn btn-add">➕ Add</button>
+                            <button onclick="binaryMath('subtract')" class="btn btn-subtract">➖ Subtract</button>
+                            <button onclick="binaryMath('multiply')" class="btn btn-multiply">✖️ Multiply</button>
+                            <button onclick="binaryMath('divide')" class="btn btn-divide">➗ Divide</button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3>🎯 Math Result</h3>
+                        <div class="result-card">
+                            <div class="mb-20">
+                                <h4 class="font-bold">📊 What we calculated:</h4>
+                                <p id="mathOperation">Enter numbers and pick an operation!</p>
+                            </div>
+                            <div class="mb-20">
+                                <h4 class="font-bold">💻 Binary Answer:</h4>
+                                <p class="result-number" id="binaryMathResult">-</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">🔢 Regular Number Answer:</h4>
+                                <p class="result-number" id="decimalMathResult">-</p>
+                            </div>
+                            <div id="mathSteps" class="result-explanation" style="display: none;">
+                                <h4 class="font-bold">📝 Step-by-Step:</h4>
+                                <div id="mathStepsContent"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Binary Operations -->
+            <div class="card">
+                <h2>⚡ Advanced Binary Operations</h2>
+                
+                <div class="grid grid-2">
+                    <!-- Binary Multiplication -->
+                    <div class="practice-section">
+                        <h3>✖️ Binary Multiplication</h3>
+                        <p class="text-sm">Step-by-step binary multiplication</p>
+                        
+                        <div class="form-group">
+                            <input type="text" id="multA" placeholder="Try: 1011" class="form-input text-center">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="multB" placeholder="Try: 101" class="form-input text-center">
+                        </div>
+                        <button onclick="binaryMultiplication()" class="btn btn-primary btn-full">Show Multiplication Steps</button>
+                        
+                        <div id="multResult" class="mt-20 learn-subsection">
+                            <h4>Binary Multiplication Rules:</h4>
+                            <p>0 × 0 = 0<br>0 × 1 = 0<br>1 × 0 = 0<br>1 × 1 = 1</p>
+                        </div>
+                    </div>
+
+                    <!-- Binary Division -->
+                    <div class="practice-section">
+                        <h3>➗ Binary Division</h3>
+                        <p class="text-sm">Long division in binary</p>
+                        
+                        <div class="form-group">
+                            <input type="text" id="divA" placeholder="Try: 1100" class="form-input text-center">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="divB" placeholder="Try: 11" class="form-input text-center">
+                        </div>
+                        <button onclick="binaryDivision()" class="btn btn-primary btn-full">Show Division Steps</button>
+                        
+                        <div id="divResult" class="mt-20 learn-subsection">
+                            <h4>Binary Division:</h4>
+                            <p>Just like long division, but simpler - only 0s and 1s!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1's and 2's Complement -->
+            <div class="card">
+                <h2>🔄 1's and 2's Complement</h2>
+                
+                <div class="info-box">
+                    <h3>💡 What are Complements?</h3>
+                    <p>Complements are ways to represent negative numbers in binary. They're essential for computer arithmetic!</p>
+                </div>
+
+                <div class="grid grid-3">
+                    <!-- 1's Complement -->
+                    <div class="practice-section">
+                        <h3>🔄 1's Complement</h3>
+                        <p class="text-sm">Flip all bits: 0→1, 1→0</p>
+                        
+                        <div class="form-group">
+                            <input type="text" id="onesInput" placeholder="Try: 1010" class="form-input text-center">
+                        </div>
+                        <button onclick="calculateOnesComplement()" class="btn btn-primary btn-full">Find 1's Complement</button>
+                        
+                        <div id="onesResult" class="mt-20 learn-subsection">
+                            <h4>How 1's Complement Works:</h4>
+                            <p>Simply flip every bit - change 0 to 1 and 1 to 0!</p>
+                        </div>
+                    </div>
+
+                    <!-- 2's Complement -->
+                    <div class="practice-section">
+                        <h3>➕ 2's Complement</h3>
+                        <p class="text-sm">1's complement + 1</p>
+                        
+                        <div class="form-group">
+                            <input type="text" id="twosInput" placeholder="Try: 1010" class="form-input text-center">
+                        </div>
+                        <button onclick="calculateTwosComplement()" class="btn btn-primary btn-full">Find 2's Complement</button>
+                        
+                        <div id="twosResult" class="mt-20 learn-subsection">
+                            <h4>How 2's Complement Works:</h4>
+                            <p>1. Find 1's complement<br>2. Add 1 to the result</p>
+                        </div>
+                    </div>
+
+                    <!-- Binary Subtraction Methods -->
+                    <div class="practice-section">
+                        <h3>➖ Binary Subtraction</h3>
+                        <p class="text-sm">Choose your subtraction method</p>
+                        
+                        <div class="form-group">
+                            <input type="text" id="subA" placeholder="A: 1100" class="form-input text-center">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="subB" placeholder="B: 1010" class="form-input text-center">
+                        </div>
+                        
+                        <div class="btn-grid">
+                            <button onclick="directBinarySubtraction()" class="btn btn-primary text-sm">Direct Method</button>
+                            <button onclick="onesComplementSubtraction()" class="btn btn-primary text-sm">1's Complement</button>
+                            <button onclick="twosComplementSubtraction()" class="btn btn-primary text-sm">2's Complement</button>
+                        </div>
+                        
+                        <div id="subResult" class="mt-20 learn-subsection">
+                            <h4>Binary Subtraction Methods:</h4>
+                            <p>Enter two binary numbers and choose a method to see detailed steps!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parity Bit -->
+            <div class="card">
+                <h2>🔍 Parity Bit Calculator</h2>
+                
+                <div class="info-box">
+                    <h3>💡 What is a Parity Bit?</h3>
+                    <p>A parity bit is an extra bit added to data to detect errors during transmission. It helps ensure data integrity!</p>
+                </div>
+
+                <div class="grid grid-2">
+                    <div class="practice-section">
+                        <h3>⚖️ Even Parity</h3>
+                        <p class="text-sm">Makes total number of 1s even</p>
+                        
+                        <div class="form-group">
+                            <input type="text" id="evenParityInput" placeholder="Try: 1011" class="form-input text-center">
+                        </div>
+                        <button onclick="calculateEvenParity()" class="btn btn-primary btn-full">Calculate Even Parity</button>
+                        
+                        <div id="evenParityResult" class="mt-20 learn-subsection">
+                            <h4>Even Parity Rule:</h4>
+                            <p>Add a bit so the total number of 1s is even</p>
+                        </div>
+                    </div>
+
+                    <div class="practice-section">
+                        <h3>🔢 Odd Parity</h3>
+                        <p class="text-sm">Makes total number of 1s odd</p>
+                        
+                        <div class="form-group">
+                            <input type="text" id="oddParityInput" placeholder="Try: 1011" class="form-input text-center">
+                        </div>
+                        <button onclick="calculateOddParity()" class="btn btn-primary btn-full">Calculate Odd Parity</button>
+                        
+                        <div id="oddParityResult" class="mt-20 learn-subsection">
+                            <h4>Odd Parity Rule:</h4>
+                            <p>Add a bit so the total number of 1s is odd</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BCD Operations -->
+            <div class="card">
+                <h2>🔢 BCD Addition & Subtraction</h2>
+                
+                <div class="info-box">
+                    <h3>💡 What is BCD Math?</h3>
+                    <p>BCD (Binary Coded Decimal) represents each decimal digit as 4 bits. Special rules apply for arithmetic!</p>
+                </div>
+
+                <div class="grid grid-2">
+                    <div class="practice-section">
+                        <h3>➕ BCD Addition</h3>
+                        <p class="text-sm">Add BCD numbers with correction</p>
+                        
+                        <div class="form-group">
+                            <label>First BCD number:</label>
+                            <input type="text" id="bcdAddA" placeholder="Try: 0101 (5)" class="form-input text-center">
+                        </div>
+                        <div class="form-group">
+                            <label>Second BCD number:</label>
+                            <input type="text" id="bcdAddB" placeholder="Try: 0111 (7)" class="form-input text-center">
+                        </div>
+                        <button onclick="bcdAddition()" class="btn btn-primary btn-full">Add BCD Numbers</button>
+                        
+                        <div id="bcdAddResult" class="mt-20 learn-subsection">
+                            <h4>BCD Addition Rules:</h4>
+                            <p>If result > 9 (1001), add 6 (0110) for correction</p>
+                        </div>
+                    </div>
+
+                    <div class="practice-section">
+                        <h3>➖ BCD Subtraction</h3>
+                        <p class="text-sm">Subtract using 10's complement</p>
+                        
+                        <div class="form-group">
+                            <label>First BCD number:</label>
+                            <input type="text" id="bcdSubA" placeholder="Try: 1000 (8)" class="form-input text-center">
+                        </div>
+                        <div class="form-group">
+                            <label>Second BCD number:</label>
+                            <input type="text" id="bcdSubB" placeholder="Try: 0011 (3)" class="form-input text-center">
+                        </div>
+                        <button onclick="bcdSubtraction()" class="btn btn-primary btn-full">Subtract BCD Numbers</button>
+                        
+                        <div id="bcdSubResult" class="mt-20 learn-subsection">
+                            <h4>BCD Subtraction:</h4>
+                            <p>Uses 10's complement method for each digit</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Special Codes Tab -->
+        <div id="codes" class="tab-content">
+            <div class="card">
+                <h2>🔤 Special Computer Codes</h2>
+                
+                <div class="info-box">
+                    <h3>💡 What are these?</h3>
+                    <p>These are special ways computers store and process different types of information like letters and numbers.</p>
+                </div>
+                
+                <div class="grid grid-3">
+                    <!-- ASCII Code -->
+                    <div class="practice-section">
+                        <h3>🔤 ASCII Code</h3>
+                        <p class="text-sm">How computers store letters and symbols</p>
+                        
+                        <div class="form-group">
+                            <input type="text" id="asciiInput" placeholder="Type: A" maxlength="1" class="form-input text-center">
+                        </div>
+                        <button onclick="convertASCII()" class="btn btn-primary btn-full">Convert Letter</button>
+                        
+                        <div id="asciiResult" class="mt-20 learn-subsection">
+                            Enter a letter to see its code!
+                        </div>
+                    </div>
+                    
+                    <!-- BCD Code -->
+                    <div class="practice-section">
+                        <h3>🔢 BCD Code</h3>
+                        <p class="text-sm">Each digit gets its own 4-bit binary code</p>
+                        
+                        <div class="form-group">
+                            <input type="text" id="bcdInput" placeholder="Try: 1234" class="form-input text-center">
+                        </div>
+                        <button onclick="convertBCD()" class="btn btn-primary btn-full">Convert to BCD</button>
+                        
+                        <div id="bcdResult" class="mt-20 learn-subsection">
+                            Enter numbers to see BCD code!
+                        </div>
+                    </div>
+                    
+                    <!-- Gray Code -->
+                    <div class="practice-section">
+                        <h3>⚡ Gray Code</h3>
+                        <p class="text-sm">Special binary code where only one bit changes at a time</p>
+                        
+                        <div class="form-group">
+                            <input type="text" id="grayInput" placeholder="Try: 1010" class="form-input text-center">
+                        </div>
+                        <button onclick="convertGray()" class="btn btn-primary btn-full">Convert to Gray</button>
+                        
+                        <div id="grayResult" class="mt-20 learn-subsection">
+                            Enter binary to see Gray code!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            
+            // Update button styles
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function convertNumber() {
+            const input = document.getElementById('inputNumber').value.trim();
+            const inputBase = parseInt(document.getElementById('inputBase').value);
+            
+            if (!input) {
+                alert('Please enter a number first! 😊');
+                return;
+            }
+            
+            try {
+                // Validate input
+                if (!isValidInput(input, inputBase)) {
+                    return;
+                }
+                
+                // Convert to decimal first
+                let decimal = parseInt(input, inputBase);
+                
+                if (isNaN(decimal) || decimal < 0) {
+                    alert('Oops! That doesn\'t look like a valid number for the selected type. 🤔');
+                    return;
+                }
+                
+                // Show results
+                document.getElementById('decimalResult').textContent = decimal;
+                
+                const binary = decimal.toString(2);
+                document.getElementById('binaryResult').textContent = binary;
+                document.getElementById('binarySteps').textContent = getSimpleSteps(decimal, 2, 'Divide by 2');
+                
+                const octal = decimal.toString(8);
+                document.getElementById('octalResult').textContent = octal;
+                document.getElementById('octalSteps').textContent = getSimpleSteps(decimal, 8, 'Divide by 8');
+                
+                const hex = decimal.toString(16).toUpperCase();
+                document.getElementById('hexResult').textContent = hex;
+                document.getElementById('hexSteps').textContent = getSimpleSteps(decimal, 16, 'Divide by 16');
+                
+            } catch (error) {
+                alert('Something went wrong! Please try again. 😅');
+            }
+        }
+
+        function isValidInput(input, base) {
+            const patterns = {
+                2: /^[01]+$/,
+                8: /^[0-7]+$/,
+                10: /^\d+$/,
+                16: /^[0-9A-Fa-f]+$/
+            };
+            
+            const messages = {
+                2: 'Binary numbers can only use 0 and 1! 💻',
+                8: 'Octal numbers can only use digits 0-7! 🎯',
+                10: 'Regular numbers can only use digits 0-9! 🔢',
+                16: 'Hex numbers can use 0-9 and A-F! 🔥'
+            };
+            
+            if (!patterns[base].test(input)) {
+                alert(messages[base]);
+                return false;
+            }
+            return true;
+        }
+
+        function getSimpleSteps(decimal, base, operation) {
+            if (decimal === 0) return 'Zero is zero in any system! 😄';
+            if (decimal < base) return `${decimal} is less than ${base}, so it stays ${decimal}`;
+            
+            let steps = [];
+            let temp = decimal;
+            let count = 0;
+            
+            while (temp > 0 && count < 3) {
+                const quotient = Math.floor(temp / base);
+                const remainder = temp % base;
+                const remainderDisplay = base === 16 && remainder > 9 ? 
+                    `${remainder} (which is ${String.fromCharCode(65 + remainder - 10)})` : remainder;
+                
+                steps.push(`${temp} ÷ ${base} = ${quotient} remainder ${remainderDisplay}`);
+                temp = quotient;
+                count++;
+            }
+            
+            if (temp > 0) steps.push('... (continue dividing)');
+            return steps.join(' → ');
+        }
+
+        function binaryMath(operation) {
+            const binary1 = document.getElementById('binary1').value.trim();
+            const binary2 = document.getElementById('binary2').value.trim();
+            
+            if (!binary1 || !binary2) {
+                alert('Please enter both binary numbers! 😊');
+                return;
+            }
+            
+            if (!/^[01]+$/.test(binary1) || !/^[01]+$/.test(binary2)) {
+                alert('Binary numbers can only have 0s and 1s! 💻');
+                return;
+            }
+            
+            const decimal1 = parseInt(binary1, 2);
+            const decimal2 = parseInt(binary2, 2);
+            let result, operationText, symbol;
+            
+            switch (operation) {
+                case 'add':
+                    result = decimal1 + decimal2;
+                    symbol = '+';
+                    break;
+                case 'subtract':
+                    result = decimal1 - decimal2;
+                    symbol = '-';
+                    break;
+                case 'multiply':
+                    result = decimal1 * decimal2;
+                    symbol = '×';
+                    break;
+                case 'divide':
+                    if (decimal2 === 0) {
+                        alert('Cannot divide by zero! 🚫');
+                        return;
+                    }
+                    result = Math.floor(decimal1 / decimal2);
+                    symbol = '÷';
+                    break;
+            }
+            
+            operationText = `${binary1} ${symbol} ${binary2}`;
+            const binaryResult = result >= 0 ? result.toString(2) : `Negative result: ${Math.abs(result).toString(2)}`;
+            
+            document.getElementById('mathOperation').textContent = operationText;
+            document.getElementById('binaryMathResult').textContent = binaryResult;
+            document.getElementById('decimalMathResult').textContent = result;
+            
+            // Show steps for multiplication and division
+            if (operation === 'multiply' || operation === 'divide') {
+                document.getElementById('mathSteps').style.display = 'block';
+                if (operation === 'multiply') {
+                    document.getElementById('mathStepsContent').innerHTML = getMultiplicationSteps(binary1, binary2);
+                } else {
+                    document.getElementById('mathStepsContent').innerHTML = getDivisionSteps(binary1, binary2);
+                }
+            } else {
+                document.getElementById('mathSteps').style.display = 'none';
+            }
+        }
+
+        function getMultiplicationSteps(binary1, binary2) {
+            const decimal1 = parseInt(binary1, 2);
+            const decimal2 = parseInt(binary2, 2);
+            
+            let steps = `<div class="code-display">`;
+            steps += `<div style="text-align: right; margin-bottom: 10px;">`;
+            steps += `<div>  ${binary1.padStart(8, ' ')}</div>`;
+            steps += `<div>× ${binary2.padStart(8, ' ')}</div>`;
+            steps += `<div>${'─'.repeat(10)}</div>`;
+            
+            let partialProducts = [];
+            for (let i = binary2.length - 1; i >= 0; i--) {
+                if (binary2[i] === '1') {
+                    const shift = binary2.length - 1 - i;
+                    const product = binary1 + '0'.repeat(shift);
+                    partialProducts.push(product);
+                    steps += `<div>${product.padStart(10, ' ')}</div>`;
+                }
+            }
+            
+            const finalResult = (decimal1 * decimal2).toString(2);
+            steps += `<div>${'─'.repeat(10)}</div>`;
+            steps += `<div>${finalResult.padStart(10, ' ')}</div>`;
+            steps += `</div></div>`;
+            
+            return steps;
+        }
+
+        function getDivisionSteps(binary1, binary2) {
+            const decimal1 = parseInt(binary1, 2);
+            const decimal2 = parseInt(binary2, 2);
+            const quotient = Math.floor(decimal1 / decimal2);
+            const remainder = decimal1 % decimal2;
+            
+            return `<div class="code-display">
+                <div><strong>Long Division Steps:</strong></div>
+                <div>${binary1} ÷ ${binary2}</div>
+                <div>Quotient: ${quotient.toString(2)}</div>
+                <div>Remainder: ${remainder.toString(2)}</div>
+                <div style="margin-top: 10px; color: #10b981;">
+                    Check: ${quotient} × ${decimal2} + ${remainder} = ${decimal1}
+                </div>
+            </div>`;
+        }
+
+        // Binary Multiplication with detailed steps
+        function binaryMultiplication() {
+            const inputA = document.getElementById('multA').value.trim();
+            const inputB = document.getElementById('multB').value.trim();
+            
+            if (!inputA || !inputB || !/^[01]+$/.test(inputA) || !/^[01]+$/.test(inputB)) {
+                alert('Please enter valid binary numbers (only 0s and 1s)! 💻');
+                return;
+            }
+            
+            const decimalA = parseInt(inputA, 2);
+            const decimalB = parseInt(inputB, 2);
+            const result = decimalA * decimalB;
+            const binaryResult = result.toString(2);
+            
+            let steps = `<h4>Step-by-Step Binary Multiplication:</h4>`;
+            steps += `<div class="code-display" style="text-align: right;">`;
+            steps += `<div>    ${inputA}</div>`;
+            steps += `<div>×   ${inputB}</div>`;
+            steps += `<div>${'─'.repeat(Math.max(inputA.length, inputB.length) + 4)}</div>`;
+            
+            // Show partial products
+            let partialProducts = [];
+            for (let i = inputB.length - 1; i >= 0; i--) {
+                if (inputB[i] === '1') {
+                    const shift = inputB.length - 1 - i;
+                    const product = inputA + '0'.repeat(shift);
+                    partialProducts.push(product);
+                    steps += `<div>${product.padStart(inputA.length + inputB.length, ' ')}</div>`;
+                }
+            }
+            
+            steps += `<div>${'─'.repeat(Math.max(inputA.length, inputB.length) + 4)}</div>`;
+            steps += `<div>${binaryResult.padStart(inputA.length + inputB.length, ' ')}</div>`;
+            steps += `</div>`;
+            steps += `<p><strong>Decimal check:</strong> ${decimalA} × ${decimalB} = ${result}</p>`;
+            
+            document.getElementById('multResult').innerHTML = steps;
+        }
+
+        // Binary Division with detailed steps
+        function binaryDivision() {
+            const inputA = document.getElementById('divA').value.trim();
+            const inputB = document.getElementById('divB').value.trim();
+            
+            if (!inputA || !inputB || !/^[01]+$/.test(inputA) || !/^[01]+$/.test(inputB)) {
+                alert('Please enter valid binary numbers (only 0s and 1s)! 💻');
+                return;
+            }
+            
+            const decimalA = parseInt(inputA, 2);
+            const decimalB = parseInt(inputB, 2);
+            
+            if (decimalB === 0) {
+                alert('Cannot divide by zero! 🚫');
+                return;
+            }
+            
+            const quotient = Math.floor(decimalA / decimalB);
+            const remainder = decimalA % decimalB;
+            const binaryQuotient = quotient.toString(2);
+            const binaryRemainder = remainder.toString(2);
+            
+            let steps = `<h4>Binary Long Division:</h4>`;
+            steps += `<div class="code-display">`;
+            steps += `<div><strong>Problem:</strong> ${inputA} ÷ ${inputB}</div><br>`;
+            steps += `<div><strong>Quotient:</strong> ${binaryQuotient}</div>`;
+            steps += `<div><strong>Remainder:</strong> ${binaryRemainder}</div><br>`;
+            steps += `<div style="color: #10b981;"><strong>Check:</strong></div>`;
+            steps += `<div>${quotient} × ${decimalB} + ${remainder} = ${decimalA} ✓</div>`;
+            steps += `</div>`;
+            
+            document.getElementById('divResult').innerHTML = steps;
+        }
+
+        // Direct Binary Subtraction
+        function directBinarySubtraction() {
+            const inputA = document.getElementById('subA').value.trim();
+            const inputB = document.getElementById('subB').value.trim();
+            
+            if (!inputA || !inputB || !/^[01]+$/.test(inputA) || !/^[01]+$/.test(inputB)) {
+                alert('Please enter valid binary numbers (only 0s and 1s)! 💻');
+                return;
+            }
+            
+            const decimalA = parseInt(inputA, 2);
+            const decimalB = parseInt(inputB, 2);
+            
+            if (decimalA < decimalB) {
+                alert('For direct method, first number should be larger! Try 1\'s or 2\'s complement for negative results. 😊');
+                return;
+            }
+            
+            // Perform binary subtraction step by step
+            const maxLen = Math.max(inputA.length, inputB.length);
+            const A = inputA.padStart(maxLen, '0');
+            const B = inputB.padStart(maxLen, '0');
+            
+            let result = '';
+            let borrow = 0;
+            let steps = [];
+            
+            for (let i = maxLen - 1; i >= 0; i--) {
+                const bitA = parseInt(A[i]) - borrow;
+                const bitB = parseInt(B[i]);
+                
+                if (bitA >= bitB) {
+                    result = (bitA - bitB) + result;
+                    borrow = 0;
+                    steps.push(`Position ${maxLen - i}: ${bitA} - ${bitB} = ${bitA - bitB}`);
+                } else {
+                    result = (bitA + 2 - bitB) + result;
+                    borrow = 1;
+                    steps.push(`Position ${maxLen - i}: ${bitA} - ${bitB} (borrow 1) = ${bitA + 2 - bitB}`);
+                }
+            }
+            
+            // Remove leading zeros
+            result = result.replace(/^0+/, '') || '0';
+            
+            document.getElementById('subResult').innerHTML = 
+                `<h4>Direct Binary Subtraction: ${A} - ${B}</h4>
+                 <div class="code-display">
+                     <div><strong>Steps (right to left):</strong></div>
+                     ${steps.reverse().map(step => `<div>${step}</div>`).join('')}
+                     <br>
+                     <div><strong>Result:</strong> ${result}</div>
+                     <div><strong>Decimal check:</strong> ${decimalA} - ${decimalB} = ${decimalA - decimalB}</div>
+                 </div>`;
+        }
+
+        // Parity Bit Functions
+        function calculateEvenParity() {
+            const input = document.getElementById('evenParityInput').value.trim();
+            
+            if (!input || !/^[01]+$/.test(input)) {
+                alert('Please enter binary numbers (only 0s and 1s)! 💻');
+                return;
+            }
+            
+            const onesCount = (input.match(/1/g) || []).length;
+            const parityBit = onesCount % 2 === 0 ? '0' : '1';
+            const finalCode = input + parityBit;
+            
+            document.getElementById('evenParityResult').innerHTML = 
+                `<h4>Even Parity Calculation:</h4>
+                 <p><strong>Original data:</strong> ${input}</p>
+                 <p><strong>Number of 1s:</strong> ${onesCount}</p>
+                 <p><strong>Parity bit needed:</strong> ${parityBit} (to make total even)</p>
+                 <p><strong>Final code:</strong> ${finalCode}</p>
+                 <p><strong>Total 1s now:</strong> ${onesCount + parseInt(parityBit)} (even ✓)</p>`;
+        }
+
+        function calculateOddParity() {
+            const input = document.getElementById('oddParityInput').value.trim();
+            
+            if (!input || !/^[01]+$/.test(input)) {
+                alert('Please enter binary numbers (only 0s and 1s)! 💻');
+                return;
+            }
+            
+            const onesCount = (input.match(/1/g) || []).length;
+            const parityBit = onesCount % 2 === 1 ? '0' : '1';
+            const finalCode = input + parityBit;
+            
+            document.getElementById('oddParityResult').innerHTML = 
+                `<h4>Odd Parity Calculation:</h4>
+                 <p><strong>Original data:</strong> ${input}</p>
+                 <p><strong>Number of 1s:</strong> ${onesCount}</p>
+                 <p><strong>Parity bit needed:</strong> ${parityBit} (to make total odd)</p>
+                 <p><strong>Final code:</strong> ${finalCode}</p>
+                 <p><strong>Total 1s now:</strong> ${onesCount + parseInt(parityBit)} (odd ✓)</p>`;
+        }
+
+        // BCD Addition
+        function bcdAddition() {
+            const inputA = document.getElementById('bcdAddA').value.trim().replace(/\s/g, '');
+            const inputB = document.getElementById('bcdAddB').value.trim().replace(/\s/g, '');
+            
+            if (!inputA || !inputB || !/^[01]+$/.test(inputA) || !/^[01]+$/.test(inputB)) {
+                alert('Please enter valid BCD numbers (only 0s and 1s)! 💻');
+                return;
+            }
+            
+            if (inputA.length !== 4 || inputB.length !== 4) {
+                alert('Please enter 4-bit BCD numbers! Each decimal digit needs exactly 4 bits. 🔢');
+                return;
+            }
+            
+            const decimalA = parseInt(inputA, 2);
+            const decimalB = parseInt(inputB, 2);
+            
+            if (decimalA > 9 || decimalB > 9) {
+                alert('Invalid BCD! Each 4-bit group must represent 0-9 only. 🚫');
+                return;
+            }
+            
+            // Binary addition first
+            let sum = decimalA + decimalB;
+            let binarySum = sum.toString(2).padStart(4, '0');
+            let correction = '';
+            let finalResult = '';
+            
+            if (sum > 9) {
+                // Need correction - add 6
+                const correctedSum = sum + 6;
+                correction = ` + 6 = ${correctedSum.toString(2)}`;
+                finalResult = correctedSum.toString(2);
+            } else {
+                finalResult = binarySum;
+                correction = ' (no correction needed)';
+            }
+            
+            document.getElementById('bcdAddResult').innerHTML = 
+                `<h4>BCD Addition: ${inputA} + ${inputB}</h4>
+                 <div class="code-display">
+                     <div><strong>Decimal values:</strong> ${decimalA} + ${decimalB} = ${sum}</div>
+                     <div><strong>Binary addition:</strong> ${inputA} + ${inputB} = ${binarySum}</div>
+                     <div><strong>Correction:</strong> ${binarySum}${correction}</div>
+                     <div><strong>Final BCD result:</strong> ${finalResult}</div>
+                     <div style="color: #10b981; margin-top: 10px;">
+                         <strong>Rule:</strong> If sum > 9, add 0110 (6) for BCD correction
+                     </div>
+                 </div>`;
+        }
+
+        // BCD Subtraction
+        function bcdSubtraction() {
+            const inputA = document.getElementById('bcdSubA').value.trim().replace(/\s/g, '');
+            const inputB = document.getElementById('bcdSubB').value.trim().replace(/\s/g, '');
+            
+            if (!inputA || !inputB || !/^[01]+$/.test(inputA) || !/^[01]+$/.test(inputB)) {
+                alert('Please enter valid BCD numbers (only 0s and 1s)! 💻');
+                return;
+            }
+            
+            if (inputA.length !== 4 || inputB.length !== 4) {
+                alert('Please enter 4-bit BCD numbers! Each decimal digit needs exactly 4 bits. 🔢');
+                return;
+            }
+            
+            const decimalA = parseInt(inputA, 2);
+            const decimalB = parseInt(inputB, 2);
+            
+            if (decimalA > 9 || decimalB > 9) {
+                alert('Invalid BCD! Each 4-bit group must represent 0-9 only. 🚫');
+                return;
+            }
+            
+            if (decimalA < decimalB) {
+                alert('For this example, first number should be larger than second! 😊');
+                return;
+            }
+            
+            // 10's complement method
+            const complement = 10 - decimalB;
+            const complementBCD = complement.toString(2).padStart(4, '0');
+            const sum = decimalA + complement;
+            let result = sum - 10; // Remove the carry
+            
+            document.getElementById('bcdSubResult').innerHTML = 
+                `<h4>BCD Subtraction: ${inputA} - ${inputB}</h4>
+                 <div class="code-display">
+                     <div><strong>Decimal:</strong> ${decimalA} - ${decimalB}</div>
+                     <div><strong>10's complement of ${decimalB}:</strong> 10 - ${decimalB} = ${complement}</div>
+                     <div><strong>10's complement in BCD:</strong> ${complementBCD}</div>
+                     <div><strong>Add:</strong> ${decimalA} + ${complement} = ${sum}</div>
+                     <div><strong>Remove carry (subtract 10):</strong> ${sum} - 10 = ${result}</div>
+                     <div><strong>Final result:</strong> ${result.toString(2).padStart(4, '0')}</div>
+                     <div style="color: #10b981; margin-top: 10px;">
+                         <strong>Decimal check:</strong> ${decimalA} - ${decimalB} = ${result} ✓
+                     </div>
+                 </div>`;
+        }
+
+        function convertASCII() {
+            const input = document.getElementById('asciiInput').value;
+            
+            if (!input) {
+                alert('Please enter a character! 🔤');
+                return;
+            }
+            
+            const char = input[0];
+            const ascii = char.charCodeAt(0);
+            const binary = ascii.toString(2).padStart(8, '0');
+            const hex = ascii.toString(16).toUpperCase();
+            
+            document.getElementById('asciiResult').innerHTML = 
+                `<strong>Letter:</strong> '${char}'<br>
+                 <strong>ASCII Number:</strong> ${ascii}<br>
+                 <strong>Binary:</strong> ${binary}<br>
+                 <strong>Hex:</strong> ${hex}`;
+        }
+
+        function convertBCD() {
+            const input = document.getElementById('bcdInput').value.trim();
+            
+            if (!input || !/^\d+$/.test(input)) {
+                alert('Please enter only regular numbers (0-9)! 🔢');
+                return;
+            }
+            
+            let bcdCode = '';
+            let explanation = 'Each digit becomes 4 bits: ';
+            
+            for (let i = 0; i < input.length; i++) {
+                const digit = parseInt(input[i]);
+                const bcd = digit.toString(2).padStart(4, '0');
+                bcdCode += bcd + ' ';
+                explanation += `${digit}→${bcd} `;
+            }
+            
+            document.getElementById('bcdResult').innerHTML = 
+                `<strong>Original:</strong> ${input}<br>
+                 <strong>BCD Code:</strong> ${bcdCode.trim()}<br>
+                 <strong>How:</strong> ${explanation}`;
+        }
+
+        function convertGray() {
+            const input = document.getElementById('grayInput').value.trim();
+            
+            if (!input || !/^[01]+$/.test(input)) {
+                alert('Please enter binary numbers (only 0s and 1s)! 💻');
+                return;
+            }
+            
+            // Binary to Gray Code
+            let gray = input[0]; // First bit stays the same
+            for (let i = 1; i < input.length; i++) {
+                gray += (parseInt(input[i-1]) ^ parseInt(input[i])).toString();
+            }
+            
+            document.getElementById('grayResult').innerHTML = 
+                `<strong>Original Binary:</strong> ${input}<br>
+                 <strong>Gray Code:</strong> ${gray}<br>
+                 <strong>Rule:</strong> First bit stays, others are XOR of adjacent bits`;
+        }
+
+        // 1's Complement Function
+        function calculateOnesComplement() {
+            const input = document.getElementById('onesInput').value.trim();
+            
+            if (!input || !/^[01]+$/.test(input)) {
+                alert('Please enter binary numbers (only 0s and 1s)! 💻');
+                return;
+            }
+            
+            let onesComp = '';
+            for (let i = 0; i < input.length; i++) {
+                onesComp += input[i] === '0' ? '1' : '0';
+            }
+            
+            document.getElementById('onesResult').innerHTML = 
+                `<h4>Step-by-Step:</h4>
+                 <p><strong>Original:</strong> ${input}</p>
+                 <p><strong>1's Complement:</strong> ${onesComp}</p>
+                 <p class="text-sm">Each bit flipped: ${input.split('').map((bit, i) => `${bit}→${onesComp[i]}`).join(', ')}</p>`;
+        }
+
+        // 2's Complement Function
+        function calculateTwosComplement() {
+            const input = document.getElementById('twosInput').value.trim();
+            
+            if (!input || !/^[01]+$/.test(input)) {
+                alert('Please enter binary numbers (only 0s and 1s)! 💻');
+                return;
+            }
+            
+            // Calculate 1's complement
+            let onesComp = '';
+            for (let i = 0; i < input.length; i++) {
+                onesComp += input[i] === '0' ? '1' : '0';
+            }
+            
+            // Add 1 to get 2's complement
+            let twosComp = '';
+            let carry = 1;
+            for (let i = onesComp.length - 1; i >= 0; i--) {
+                const sum = parseInt(onesComp[i]) + carry;
+                twosComp = (sum % 2) + twosComp;
+                carry = Math.floor(sum / 2);
+            }
+            
+            document.getElementById('twosResult').innerHTML = 
+                `<h4>Step-by-Step:</h4>
+                 <p><strong>Original:</strong> ${input}</p>
+                 <p><strong>1's Complement:</strong> ${onesComp}</p>
+                 <p><strong>Add 1:</strong> ${onesComp} + 1</p>
+                 <p><strong>2's Complement:</strong> ${twosComp}</p>
+                 <p class="text-sm">Used for representing negative numbers in computers!</p>`;
+        }
+
+        // 1's Complement Subtraction Function
+        function onesComplementSubtraction() {
+            const inputA = document.getElementById('subA').value.trim();
+            const inputB = document.getElementById('subB').value.trim();
+            
+            if (!inputA || !inputB || !/^[01]+$/.test(inputA) || !/^[01]+$/.test(inputB)) {
+                alert('Please enter valid binary numbers (only 0s and 1s)! 💻');
+                return;
+            }
+            
+            // Make both numbers the same length
+            const maxLen = Math.max(inputA.length, inputB.length);
+            const A = inputA.padStart(maxLen, '0');
+            const B = inputB.padStart(maxLen, '0');
+            
+            // Calculate 1's complement of B
+            let onesCompB = '';
+            for (let i = 0; i < B.length; i++) {
+                onesCompB += B[i] === '0' ? '1' : '0';
+            }
+            
+            // Add A + 1's complement of B
+            let result = '';
+            let carry = 0;
+            for (let i = A.length - 1; i >= 0; i--) {
+                const sum = parseInt(A[i]) + parseInt(onesCompB[i]) + carry;
+                result = (sum % 2) + result;
+                carry = Math.floor(sum / 2);
+            }
+            
+            // End-around carry: if there's a carry out, add it to the result
+            if (carry) {
+                let finalResult = '';
+                carry = 1;
+                for (let i = result.length - 1; i >= 0; i--) {
+                    const sum = parseInt(result[i]) + carry;
+                    finalResult = (sum % 2) + finalResult;
+                    carry = Math.floor(sum / 2);
+                }
+                result = finalResult;
+            }
+            
+            const decimalA = parseInt(A, 2);
+            const decimalB = parseInt(B, 2);
+            const decimalResult = decimalA - decimalB;
+            
+            document.getElementById('subResult').innerHTML = 
+                `<h4>1's Complement Subtraction: ${A} - ${B}</h4>
+                 <div class="space-y">
+                     <p><strong>Step 1:</strong> 1's complement of ${B} = ${onesCompB}</p>
+                     <p><strong>Step 2:</strong> ${A} + ${onesCompB}</p>
+                     <p><strong>Step 3:</strong> ${carry ? 'End-around carry applied' : 'No end-around carry needed'}</p>
+                     <p><strong>Result:</strong> ${result}</p>
+                     <p><strong>Decimal check:</strong> ${decimalA} - ${decimalB} = ${decimalResult}</p>
+                 </div>`;
+        }
+
+        // 2's Complement Subtraction Function
+        function twosComplementSubtraction() {
+            const inputA = document.getElementById('subA').value.trim();
+            const inputB = document.getElementById('subB').value.trim();
+            
+            if (!inputA || !inputB || !/^[01]+$/.test(inputA) || !/^[01]+$/.test(inputB)) {
+                alert('Please enter valid binary numbers (only 0s and 1s)! 💻');
+                return;
+            }
+            
+            // Make both numbers the same length
+            const maxLen = Math.max(inputA.length, inputB.length);
+            const A = inputA.padStart(maxLen, '0');
+            const B = inputB.padStart(maxLen, '0');
+            
+            // Calculate 2's complement of B
+            let onesCompB = '';
+            for (let i = 0; i < B.length; i++) {
+                onesCompB += B[i] === '0' ? '1' : '0';
+            }
+            
+            let twosCompB = '';
+            let carry = 1;
+            for (let i = onesCompB.length - 1; i >= 0; i--) {
+                const sum = parseInt(onesCompB[i]) + carry;
+                twosCompB = (sum % 2) + twosCompB;
+                carry = Math.floor(sum / 2);
+            }
+            
+            // Add A + 2's complement of B
+            let result = '';
+            carry = 0;
+            for (let i = A.length - 1; i >= 0; i--) {
+                const sum = parseInt(A[i]) + parseInt(twosCompB[i]) + carry;
+                result = (sum % 2) + result;
+                carry = Math.floor(sum / 2);
+            }
+            
+            const decimalA = parseInt(A, 2);
+            const decimalB = parseInt(B, 2);
+            const decimalResult = decimalA - decimalB;
+            
+            document.getElementById('subResult').innerHTML = 
+                `<h4>2's Complement Subtraction: ${A} - ${B}</h4>
+                 <div class="space-y">
+                     <p><strong>Step 1:</strong> 1's complement of ${B} = ${onesCompB}</p>
+                     <p><strong>Step 2:</strong> Add 1 to get 2's complement = ${twosCompB}</p>
+                     <p><strong>Step 3:</strong> ${A} + ${twosCompB} = ${result}</p>
+                     <p><strong>Result:</strong> ${result}</p>
+                     <p><strong>Decimal check:</strong> ${decimalA} - ${decimalB} = ${decimalResult}</p>
+                     ${carry ? '<p style="color: #10b981;"><strong>Carry out ignored</strong> (positive result)</p>' : ''}
+                 </div>`;
+        }
+
+        // Start with an example
+        document.getElementById('inputNumber').value = '42';
+        convertNumber();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'968b56d735833d54',t:'MTc1NDExNDI2Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
