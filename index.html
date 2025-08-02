@@ -941,47 +941,47 @@
                 
                 <div class="info-box">
                     <h3>💡 What is BCD Math?</h3>
-                    <p>BCD (Binary Coded Decimal) represents each decimal digit as 4 bits. Special rules apply for arithmetic!</p>
+                    <p>Enter decimal numbers (like 12.34 + 56.78) and see how computers do BCD arithmetic with each digit converted to 4-bit binary!</p>
                 </div>
 
                 <div class="grid grid-2">
                     <div class="practice-section">
                         <h3>➕ BCD Addition</h3>
-                        <p class="text-sm">Add BCD numbers with correction</p>
+                        <p class="text-sm">Add decimal numbers using BCD arithmetic</p>
                         
                         <div class="form-group">
-                            <label>First BCD number:</label>
-                            <input type="text" id="bcdAddA" placeholder="Try: 0101 (5)" class="form-input text-center">
+                            <label>First decimal number:</label>
+                            <input type="text" id="bcdAddA" placeholder="Try: 12.34" class="form-input text-center">
                         </div>
                         <div class="form-group">
-                            <label>Second BCD number:</label>
-                            <input type="text" id="bcdAddB" placeholder="Try: 0111 (7)" class="form-input text-center">
+                            <label>Second decimal number:</label>
+                            <input type="text" id="bcdAddB" placeholder="Try: 56.78" class="form-input text-center">
                         </div>
-                        <button onclick="bcdAddition()" class="btn btn-primary btn-full">Add BCD Numbers</button>
+                        <button onclick="bcdAddition()" class="btn btn-primary btn-full">Add Using BCD</button>
                         
                         <div id="bcdAddResult" class="mt-20 learn-subsection">
                             <h4>BCD Addition Rules:</h4>
-                            <p>If result > 9 (1001), add 6 (0110) for correction</p>
+                            <p>Each decimal digit becomes 4 bits, then we add with correction when needed!</p>
                         </div>
                     </div>
 
                     <div class="practice-section">
                         <h3>➖ BCD Subtraction</h3>
-                        <p class="text-sm">Subtract using 10's complement</p>
+                        <p class="text-sm">Subtract decimal numbers using BCD arithmetic</p>
                         
                         <div class="form-group">
-                            <label>First BCD number:</label>
-                            <input type="text" id="bcdSubA" placeholder="Try: 1000 (8)" class="form-input text-center">
+                            <label>First decimal number:</label>
+                            <input type="text" id="bcdSubA" placeholder="Try: 87.65" class="form-input text-center">
                         </div>
                         <div class="form-group">
-                            <label>Second BCD number:</label>
-                            <input type="text" id="bcdSubB" placeholder="Try: 0011 (3)" class="form-input text-center">
+                            <label>Second decimal number:</label>
+                            <input type="text" id="bcdSubB" placeholder="Try: 23.41" class="form-input text-center">
                         </div>
-                        <button onclick="bcdSubtraction()" class="btn btn-primary btn-full">Subtract BCD Numbers</button>
+                        <button onclick="bcdSubtraction()" class="btn btn-primary btn-full">Subtract Using BCD</button>
                         
                         <div id="bcdSubResult" class="mt-20 learn-subsection">
                             <h4>BCD Subtraction:</h4>
-                            <p>Uses 10's complement method for each digit</p>
+                            <p>Uses 10's complement method for each decimal digit!</p>
                         </div>
                     </div>
                 </div>
@@ -1017,15 +1017,16 @@
                     <!-- BCD Code -->
                     <div class="practice-section">
                         <h3>🔢 BCD Code</h3>
-                        <p class="text-sm">Each digit gets its own 4-bit binary code</p>
+                        <p class="text-sm">Convert decimal numbers (with decimal points) to BCD binary</p>
                         
                         <div class="form-group">
-                            <input type="text" id="bcdInput" placeholder="Try: 1234" class="form-input text-center">
+                            <label>Enter decimal number:</label>
+                            <input type="text" id="bcdInput" placeholder="Try: 123.45 or 67.89" class="form-input text-center">
                         </div>
                         <button onclick="convertBCD()" class="btn btn-primary btn-full">Convert to BCD</button>
                         
                         <div id="bcdResult" class="mt-20 learn-subsection">
-                            Enter numbers to see BCD code!
+                            Enter a decimal number to see BCD conversion!
                         </div>
                     </div>
                     
@@ -1093,15 +1094,15 @@
                 
                 const binary = decimal.toString(2);
                 document.getElementById('binaryResult').textContent = binary;
-                document.getElementById('binarySteps').textContent = getSimpleSteps(decimal, 2, 'Divide by 2');
+                document.getElementById('binarySteps').textContent = getSimpleSteps(decimal, 2);
                 
                 const octal = decimal.toString(8);
                 document.getElementById('octalResult').textContent = octal;
-                document.getElementById('octalSteps').textContent = getSimpleSteps(decimal, 8, 'Divide by 8');
+                document.getElementById('octalSteps').textContent = getSimpleSteps(decimal, 8);
                 
                 const hex = decimal.toString(16).toUpperCase();
                 document.getElementById('hexResult').textContent = hex;
-                document.getElementById('hexSteps').textContent = getSimpleSteps(decimal, 16, 'Divide by 16');
+                document.getElementById('hexSteps').textContent = getSimpleSteps(decimal, 16);
                 
             } catch (error) {
                 alert('Something went wrong! Please try again. 😅');
@@ -1280,25 +1281,28 @@
                     result = Math.floor(decimal1 / decimal2);
                     symbol = '÷';
                     break;
+                default:
+                    alert('Invalid operation! 🤔');
+                    return;
             }
             
             operationText = `${binary1} ${symbol} ${binary2}`;
-            const binaryResult = result >= 0 ? result.toString(2) : `Negative result: ${Math.abs(result).toString(2)}`;
+            const binaryResult = result >= 0 ? result.toString(2) : `-(${Math.abs(result).toString(2)})`;
             
             document.getElementById('mathOperation').textContent = operationText;
             document.getElementById('binaryMathResult').textContent = binaryResult;
             document.getElementById('decimalMathResult').textContent = result;
             
-            // Show steps for multiplication and division
-            if (operation === 'multiply' || operation === 'divide') {
-                document.getElementById('mathSteps').style.display = 'block';
-                if (operation === 'multiply') {
-                    document.getElementById('mathStepsContent').innerHTML = getMultiplicationSteps(binary1, binary2);
-                } else {
-                    document.getElementById('mathStepsContent').innerHTML = getDivisionSteps(binary1, binary2);
-                }
-            } else {
-                document.getElementById('mathSteps').style.display = 'none';
+            // Show steps for all operations
+            document.getElementById('mathSteps').style.display = 'block';
+            if (operation === 'multiply') {
+                document.getElementById('mathStepsContent').innerHTML = getMultiplicationSteps(binary1, binary2);
+            } else if (operation === 'divide') {
+                document.getElementById('mathStepsContent').innerHTML = getDivisionSteps(binary1, binary2);
+            } else if (operation === 'add') {
+                document.getElementById('mathStepsContent').innerHTML = getAdditionSteps(binary1, binary2);
+            } else if (operation === 'subtract') {
+                document.getElementById('mathStepsContent').innerHTML = getSubtractionSteps(binary1, binary2);
             }
         }
 
@@ -1344,6 +1348,94 @@
                 <div style="margin-top: 10px; color: #10b981;">
                     Check: ${quotient} × ${decimal2} + ${remainder} = ${decimal1}
                 </div>
+            </div>`;
+        }
+
+        function getAdditionSteps(binary1, binary2) {
+            const maxLen = Math.max(binary1.length, binary2.length);
+            const A = binary1.padStart(maxLen, '0');
+            const B = binary2.padStart(maxLen, '0');
+            
+            let result = '';
+            let carry = 0;
+            let steps = [];
+            
+            for (let i = maxLen - 1; i >= 0; i--) {
+                const bitA = parseInt(A[i]);
+                const bitB = parseInt(B[i]);
+                const sum = bitA + bitB + carry;
+                
+                result = (sum % 2) + result;
+                carry = Math.floor(sum / 2);
+                
+                steps.push(`Position ${maxLen - i}: ${bitA} + ${bitB} + ${carry > 0 ? 'carry' : '0'} = ${sum} → bit: ${sum % 2}, carry: ${Math.floor(sum / 2)}`);
+            }
+            
+            if (carry) result = carry + result;
+            
+            return `<div class="code-display">
+                <div><strong>Binary Addition Steps (right to left):</strong></div>
+                <div style="text-align: right; margin: 10px 0;">
+                    <div>  ${A}</div>
+                    <div>+ ${B}</div>
+                    <div>${'─'.repeat(maxLen + 2)}</div>
+                    <div>  ${result}</div>
+                </div>
+                <div><strong>Step-by-step:</strong></div>
+                ${steps.reverse().map(step => `<div>• ${step}</div>`).join('')}
+            </div>`;
+        }
+
+        function getSubtractionSteps(binary1, binary2) {
+            const decimal1 = parseInt(binary1, 2);
+            const decimal2 = parseInt(binary2, 2);
+            
+            if (decimal1 < decimal2) {
+                return `<div class="code-display">
+                    <div><strong>Binary Subtraction:</strong></div>
+                    <div>${binary1} - ${binary2}</div>
+                    <div style="color: #ef4444;">Result is negative: -(${(decimal2 - decimal1).toString(2)})</div>
+                    <div style="margin-top: 10px; color: #10b981;">
+                        For negative results, use 2's complement method!
+                    </div>
+                </div>`;
+            }
+            
+            const maxLen = Math.max(binary1.length, binary2.length);
+            const A = binary1.padStart(maxLen, '0');
+            const B = binary2.padStart(maxLen, '0');
+            
+            let result = '';
+            let borrow = 0;
+            let steps = [];
+            
+            for (let i = maxLen - 1; i >= 0; i--) {
+                const bitA = parseInt(A[i]) - borrow;
+                const bitB = parseInt(B[i]);
+                
+                if (bitA >= bitB) {
+                    result = (bitA - bitB) + result;
+                    borrow = 0;
+                    steps.push(`Position ${maxLen - i}: ${bitA} - ${bitB} = ${bitA - bitB}`);
+                } else {
+                    result = (bitA + 2 - bitB) + result;
+                    borrow = 1;
+                    steps.push(`Position ${maxLen - i}: ${bitA} - ${bitB} (borrow 1) = ${bitA + 2 - bitB}`);
+                }
+            }
+            
+            result = result.replace(/^0+/, '') || '0';
+            
+            return `<div class="code-display">
+                <div><strong>Binary Subtraction Steps (right to left):</strong></div>
+                <div style="text-align: right; margin: 10px 0;">
+                    <div>  ${A}</div>
+                    <div>- ${B}</div>
+                    <div>${'─'.repeat(maxLen + 2)}</div>
+                    <div>  ${result}</div>
+                </div>
+                <div><strong>Step-by-step:</strong></div>
+                ${steps.reverse().map(step => `<div>• ${step}</div>`).join('')}
             </div>`;
         }
 
@@ -1523,103 +1615,202 @@
 
         // BCD Addition
         function bcdAddition() {
-            const inputA = document.getElementById('bcdAddA').value.trim().replace(/\s/g, '');
-            const inputB = document.getElementById('bcdAddB').value.trim().replace(/\s/g, '');
+            const inputA = document.getElementById('bcdAddA').value.trim();
+            const inputB = document.getElementById('bcdAddB').value.trim();
             
-            if (!inputA || !inputB || !/^[01]+$/.test(inputA) || !/^[01]+$/.test(inputB)) {
-                alert('Please enter valid BCD numbers (only 0s and 1s)! 💻');
+            if (!inputA || !inputB) {
+                alert('Please enter both decimal numbers! 🔢');
                 return;
             }
             
-            if (inputA.length !== 4 || inputB.length !== 4) {
-                alert('Please enter 4-bit BCD numbers! Each decimal digit needs exactly 4 bits. 🔢');
+            // Validate decimal input (digits and decimal point only)
+            if (!/^\d+(\.\d+)?$/.test(inputA) || !/^\d+(\.\d+)?$/.test(inputB)) {
+                alert('Please enter valid decimal numbers (0-9 and decimal point only)! 🔢');
                 return;
             }
             
-            const decimalA = parseInt(inputA, 2);
-            const decimalB = parseInt(inputB, 2);
+            // Convert to BCD and perform addition
+            const bcdA = decimalToBCD(inputA);
+            const bcdB = decimalToBCD(inputB);
             
-            if (decimalA > 9 || decimalB > 9) {
-                alert('Invalid BCD! Each 4-bit group must represent 0-9 only. 🚫');
-                return;
-            }
+            // Align decimal points and pad with zeros
+            const [alignedA, alignedB] = alignDecimalNumbers(inputA, inputB);
+            const decimalResult = (parseFloat(inputA) + parseFloat(inputB)).toFixed(Math.max(
+                (inputA.split('.')[1] || '').length,
+                (inputB.split('.')[1] || '').length
+            ));
+            const bcdResult = decimalToBCD(decimalResult);
             
-            // Binary addition first
-            let sum = decimalA + decimalB;
-            let binarySum = sum.toString(2).padStart(4, '0');
-            let correction = '';
-            let finalResult = '';
+            // Show step-by-step BCD addition
+            let steps = [];
+            let carrySteps = [];
+            let carry = 0;
             
-            if (sum > 9) {
-                // Need correction - add 6
-                const correctedSum = sum + 6;
-                correction = ` + 6 = ${correctedSum.toString(2)}`;
-                finalResult = correctedSum.toString(2);
-            } else {
-                finalResult = binarySum;
-                correction = ' (no correction needed)';
+            // Process each digit from right to left
+            const digitsA = alignedA.replace('.', '');
+            const digitsB = alignedB.replace('.', '');
+            
+            for (let i = digitsA.length - 1; i >= 0; i--) {
+                const digitA = parseInt(digitsA[i]);
+                const digitB = parseInt(digitsB[i]);
+                const sum = digitA + digitB + carry;
+                
+                const bcdDigitA = digitA.toString(2).padStart(4, '0');
+                const bcdDigitB = digitB.toString(2).padStart(4, '0');
+                
+                if (sum > 9) {
+                    carry = 1;
+                    const correctedSum = sum - 10;
+                    steps.push(`${digitA} + ${digitB} + ${carry > 0 ? 'carry' : '0'} = ${sum} > 9, result: ${correctedSum}, carry: 1`);
+                    carrySteps.push(`${bcdDigitA} + ${bcdDigitB} = ${sum.toString(2).padStart(4, '0')} + 0110 (correction) = ${(sum + 6).toString(2)}`);
+                } else {
+                    carry = 0;
+                    steps.push(`${digitA} + ${digitB} + ${carry > 0 ? 'carry' : '0'} = ${sum} (no correction needed)`);
+                    carrySteps.push(`${bcdDigitA} + ${bcdDigitB} = ${sum.toString(2).padStart(4, '0')}`);
+                }
             }
             
             document.getElementById('bcdAddResult').innerHTML = 
                 `<h4>BCD Addition: ${inputA} + ${inputB}</h4>
                  <div class="code-display">
-                     <div><strong>Decimal values:</strong> ${decimalA} + ${decimalB} = ${sum}</div>
-                     <div><strong>Binary addition:</strong> ${inputA} + ${inputB} = ${binarySum}</div>
-                     <div><strong>Correction:</strong> ${binarySum}${correction}</div>
-                     <div><strong>Final BCD result:</strong> ${finalResult}</div>
+                     <div><strong>Step 1 - Convert to BCD:</strong></div>
+                     <div>${inputA} → ${bcdA}</div>
+                     <div>${inputB} → ${bcdB}</div>
+                     <br>
+                     <div><strong>Step 2 - Add each digit (right to left):</strong></div>
+                     ${steps.reverse().map(step => `<div>• ${step}</div>`).join('')}
+                     <br>
+                     <div><strong>Step 3 - BCD binary addition with correction:</strong></div>
+                     ${carrySteps.reverse().map(step => `<div>• ${step}</div>`).join('')}
+                     <br>
+                     <div><strong>Final Result:</strong></div>
+                     <div>Decimal: ${decimalResult}</div>
+                     <div>BCD: ${bcdResult}</div>
                      <div style="color: #10b981; margin-top: 10px;">
-                         <strong>Rule:</strong> If sum > 9, add 0110 (6) for BCD correction
+                         <strong>BCD Rule:</strong> If digit sum > 9, add 6 (0110) for correction
                      </div>
                  </div>`;
         }
 
         // BCD Subtraction
         function bcdSubtraction() {
-            const inputA = document.getElementById('bcdSubA').value.trim().replace(/\s/g, '');
-            const inputB = document.getElementById('bcdSubB').value.trim().replace(/\s/g, '');
+            const inputA = document.getElementById('bcdSubA').value.trim();
+            const inputB = document.getElementById('bcdSubB').value.trim();
             
-            if (!inputA || !inputB || !/^[01]+$/.test(inputA) || !/^[01]+$/.test(inputB)) {
-                alert('Please enter valid BCD numbers (only 0s and 1s)! 💻');
+            if (!inputA || !inputB) {
+                alert('Please enter both decimal numbers! 🔢');
                 return;
             }
             
-            if (inputA.length !== 4 || inputB.length !== 4) {
-                alert('Please enter 4-bit BCD numbers! Each decimal digit needs exactly 4 bits. 🔢');
+            // Validate decimal input
+            if (!/^\d+(\.\d+)?$/.test(inputA) || !/^\d+(\.\d+)?$/.test(inputB)) {
+                alert('Please enter valid decimal numbers (0-9 and decimal point only)! 🔢');
                 return;
             }
             
-            const decimalA = parseInt(inputA, 2);
-            const decimalB = parseInt(inputB, 2);
+            const numA = parseFloat(inputA);
+            const numB = parseFloat(inputB);
             
-            if (decimalA > 9 || decimalB > 9) {
-                alert('Invalid BCD! Each 4-bit group must represent 0-9 only. 🚫');
-                return;
-            }
-            
-            if (decimalA < decimalB) {
+            if (numA < numB) {
                 alert('For this example, first number should be larger than second! 😊');
                 return;
             }
             
-            // 10's complement method
-            const complement = 10 - decimalB;
-            const complementBCD = complement.toString(2).padStart(4, '0');
-            const sum = decimalA + complement;
-            let result = sum - 10; // Remove the carry
+            // Convert to BCD
+            const bcdA = decimalToBCD(inputA);
+            const bcdB = decimalToBCD(inputB);
+            
+            // Calculate result with proper decimal places
+            const decimalResult = (numA - numB).toFixed(Math.max(
+                (inputA.split('.')[1] || '').length,
+                (inputB.split('.')[1] || '').length
+            ));
+            const bcdResult = decimalToBCD(decimalResult);
+            
+            // Align numbers for demonstration
+            const [alignedA, alignedB] = alignDecimalNumbers(inputA, inputB);
+            
+            // Show BCD subtraction with borrowing
+            let steps = [];
+            let bcdSteps = [];
+            let borrow = 0;
+            const digitsA = alignedA.replace('.', '');
+            const digitsB = alignedB.replace('.', '');
+            
+            for (let i = digitsA.length - 1; i >= 0; i--) {
+                const digitA = parseInt(digitsA[i]) - borrow;
+                const digitB = parseInt(digitsB[i]);
+                
+                const bcdDigitA = digitA.toString(2).padStart(4, '0');
+                const bcdDigitB = digitB.toString(2).padStart(4, '0');
+                
+                if (digitA >= digitB) {
+                    const result = digitA - digitB;
+                    steps.push(`${digitA} - ${digitB} = ${result} (direct subtraction)`);
+                    bcdSteps.push(`${bcdDigitA} - ${bcdDigitB} = ${result.toString(2).padStart(4, '0')}`);
+                    borrow = 0;
+                } else {
+                    // Need to borrow
+                    const adjustedA = digitA + 10;
+                    const result = adjustedA - digitB;
+                    steps.push(`${digitA} - ${digitB}: borrow 10 → ${adjustedA} - ${digitB} = ${result}`);
+                    bcdSteps.push(`${bcdDigitA} + 1010 (borrow) - ${bcdDigitB} = ${result.toString(2).padStart(4, '0')}`);
+                    borrow = 1;
+                }
+            }
             
             document.getElementById('bcdSubResult').innerHTML = 
                 `<h4>BCD Subtraction: ${inputA} - ${inputB}</h4>
                  <div class="code-display">
-                     <div><strong>Decimal:</strong> ${decimalA} - ${decimalB}</div>
-                     <div><strong>10's complement of ${decimalB}:</strong> 10 - ${decimalB} = ${complement}</div>
-                     <div><strong>10's complement in BCD:</strong> ${complementBCD}</div>
-                     <div><strong>Add:</strong> ${decimalA} + ${complement} = ${sum}</div>
-                     <div><strong>Remove carry (subtract 10):</strong> ${sum} - 10 = ${result}</div>
-                     <div><strong>Final result:</strong> ${result.toString(2).padStart(4, '0')}</div>
+                     <div><strong>Step 1 - Convert to BCD:</strong></div>
+                     <div>${inputA} → ${bcdA}</div>
+                     <div>${inputB} → ${bcdB}</div>
+                     <br>
+                     <div><strong>Step 2 - Subtract each digit (right to left):</strong></div>
+                     ${steps.reverse().map(step => `<div>• ${step}</div>`).join('')}
+                     <br>
+                     <div><strong>Step 3 - BCD binary subtraction:</strong></div>
+                     ${bcdSteps.reverse().map(step => `<div>• ${step}</div>`).join('')}
+                     <br>
+                     <div><strong>Final Result:</strong></div>
+                     <div>Decimal: ${decimalResult}</div>
+                     <div>BCD: ${bcdResult}</div>
                      <div style="color: #10b981; margin-top: 10px;">
-                         <strong>Decimal check:</strong> ${decimalA} - ${decimalB} = ${result} ✓
+                         <strong>BCD Rule:</strong> When borrowing, add 10 (1010 in binary) to the digit
                      </div>
                  </div>`;
+        }
+
+        // Helper function to convert decimal to BCD with decimal point support
+        function decimalToBCD(decimal) {
+            let bcdCode = '';
+            
+            for (let i = 0; i < decimal.length; i++) {
+                const char = decimal[i];
+                if (char === '.') {
+                    bcdCode += '. ';
+                } else {
+                    const digit = parseInt(char);
+                    const bcd = digit.toString(2).padStart(4, '0');
+                    bcdCode += bcd + ' ';
+                }
+            }
+            
+            return bcdCode.trim();
+        }
+
+        // Helper function to align decimal numbers for calculation
+        function alignDecimalNumbers(numA, numB) {
+            const [intA, fracA = ''] = numA.split('.');
+            const [intB, fracB = ''] = numB.split('.');
+            
+            const maxInt = Math.max(intA.length, intB.length);
+            const maxFrac = Math.max(fracA.length, fracB.length);
+            
+            const alignedA = intA.padStart(maxInt, '0') + (maxFrac > 0 ? '.' + fracA.padEnd(maxFrac, '0') : '');
+            const alignedB = intB.padStart(maxInt, '0') + (maxFrac > 0 ? '.' + fracB.padEnd(maxFrac, '0') : '');
+            
+            return [alignedA, alignedB];
         }
 
         function convertASCII() {
@@ -1645,25 +1836,52 @@
         function convertBCD() {
             const input = document.getElementById('bcdInput').value.trim();
             
-            if (!input || !/^\d+$/.test(input)) {
-                alert('Please enter only regular numbers (0-9)! 🔢');
+            if (!input) {
+                alert('Please enter a decimal number! 🔢');
+                return;
+            }
+            
+            // Validate decimal input (digits and decimal point only)
+            if (!/^\d+(\.\d+)?$/.test(input)) {
+                alert('Please enter valid decimal numbers (0-9 and decimal point only)! 🔢');
                 return;
             }
             
             let bcdCode = '';
             let explanation = 'Each digit becomes 4 bits: ';
+            let stepByStep = [];
             
             for (let i = 0; i < input.length; i++) {
-                const digit = parseInt(input[i]);
-                const bcd = digit.toString(2).padStart(4, '0');
-                bcdCode += bcd + ' ';
-                explanation += `${digit}→${bcd} `;
+                const char = input[i];
+                if (char === '.') {
+                    bcdCode += '. ';
+                    explanation += '. ';
+                    stepByStep.push('Decimal point stays as is');
+                } else {
+                    const digit = parseInt(char);
+                    const bcd = digit.toString(2).padStart(4, '0');
+                    bcdCode += bcd + ' ';
+                    explanation += `${digit}→${bcd} `;
+                    stepByStep.push(`Digit ${digit} = ${bcd} in binary`);
+                }
             }
             
             document.getElementById('bcdResult').innerHTML = 
-                `<strong>Original:</strong> ${input}<br>
-                 <strong>BCD Code:</strong> ${bcdCode.trim()}<br>
-                 <strong>How:</strong> ${explanation}`;
+                `<h4>Decimal to BCD Conversion:</h4>
+                 <p><strong>Original Decimal:</strong> ${input}</p>
+                 <p><strong>BCD Code:</strong> ${bcdCode.trim()}</p>
+                 <p><strong>Step-by-step:</strong></p>
+                 <div class="code-display">
+                     ${stepByStep.map(step => `<div>• ${step}</div>`).join('')}
+                 </div>
+                 <div class="code-display" style="margin-top: 15px;">
+                     <div><strong>BCD Rules:</strong></div>
+                     <div>• Each decimal digit (0-9) = exactly 4 bits</div>
+                     <div>• Decimal point stays in the same position</div>
+                     <div>• 0→0000, 1→0001, 2→0010, 3→0011, 4→0100</div>
+                     <div>• 5→0101, 6→0110, 7→0111, 8→1000, 9→1001</div>
+                     <div>• Groups 1010-1111 are not used in BCD</div>
+                 </div>`;
         }
 
         function convertGray() {
@@ -1676,14 +1894,43 @@
             
             // Binary to Gray Code
             let gray = input[0]; // First bit stays the same
+            let steps = [`Bit 1: ${input[0]} (first bit stays the same)`];
+            
             for (let i = 1; i < input.length; i++) {
-                gray += (parseInt(input[i-1]) ^ parseInt(input[i])).toString();
+                const xorResult = parseInt(input[i-1]) ^ parseInt(input[i]);
+                gray += xorResult.toString();
+                steps.push(`Bit ${i+1}: ${input[i-1]} XOR ${input[i]} = ${xorResult}`);
+            }
+            
+            // Also show Gray to Binary conversion
+            let binaryFromGray = gray[0];
+            let grayToBinarySteps = [`Bit 1: ${gray[0]} (first bit stays the same)`];
+            
+            for (let i = 1; i < gray.length; i++) {
+                const xorResult = parseInt(binaryFromGray[i-1]) ^ parseInt(gray[i]);
+                binaryFromGray += xorResult.toString();
+                grayToBinarySteps.push(`Bit ${i+1}: ${binaryFromGray[i-1]} XOR ${gray[i]} = ${xorResult}`);
             }
             
             document.getElementById('grayResult').innerHTML = 
-                `<strong>Original Binary:</strong> ${input}<br>
-                 <strong>Gray Code:</strong> ${gray}<br>
-                 <strong>Rule:</strong> First bit stays, others are XOR of adjacent bits`;
+                `<h4>Binary to Gray Code Conversion:</h4>
+                 <div class="code-display">
+                     <div><strong>Original Binary:</strong> ${input}</div>
+                     <div><strong>Gray Code:</strong> ${gray}</div>
+                     <br>
+                     <div><strong>Conversion Steps:</strong></div>
+                     ${steps.map(step => `<div>• ${step}</div>`).join('')}
+                     <br>
+                     <div><strong>Verification (Gray to Binary):</strong></div>
+                     ${grayToBinarySteps.map(step => `<div>• ${step}</div>`).join('')}
+                     <div><strong>Result:</strong> ${binaryFromGray} ${binaryFromGray === input ? '✓' : '✗'}</div>
+                 </div>
+                 <div style="margin-top: 15px; padding: 10px; background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                     <strong>Gray Code Properties:</strong><br>
+                     • Only one bit changes between consecutive numbers<br>
+                     • Used in rotary encoders and error correction<br>
+                     • Prevents glitches in digital systems
+                 </div>`;
         }
 
         // 1's Complement Function
@@ -1770,6 +2017,8 @@
                 carry = Math.floor(sum / 2);
             }
             
+            let finalCarry = carry;
+            
             // End-around carry: if there's a carry out, add it to the result
             if (carry) {
                 let finalResult = '';
@@ -1788,12 +2037,18 @@
             
             document.getElementById('subResult').innerHTML = 
                 `<h4>1's Complement Subtraction: ${A} - ${B}</h4>
-                 <div class="space-y">
-                     <p><strong>Step 1:</strong> 1's complement of ${B} = ${onesCompB}</p>
-                     <p><strong>Step 2:</strong> ${A} + ${onesCompB}</p>
-                     <p><strong>Step 3:</strong> ${carry ? 'End-around carry applied' : 'No end-around carry needed'}</p>
-                     <p><strong>Result:</strong> ${result}</p>
-                     <p><strong>Decimal check:</strong> ${decimalA} - ${decimalB} = ${decimalResult}</p>
+                 <div class="code-display">
+                     <div><strong>Step 1:</strong> Find 1's complement of ${B}</div>
+                     <div>1's complement of ${B} = ${onesCompB}</div>
+                     <br>
+                     <div><strong>Step 2:</strong> Add A + 1's complement of B</div>
+                     <div>${A} + ${onesCompB} = ${result}${finalCarry ? ' (with carry out)' : ''}</div>
+                     <br>
+                     <div><strong>Step 3:</strong> ${finalCarry ? 'Apply end-around carry' : 'No end-around carry needed'}</div>
+                     ${finalCarry ? `<div>Add carry to result: ${result}</div>` : ''}
+                     <br>
+                     <div><strong>Final Result:</strong> ${result}</div>
+                     <div><strong>Decimal check:</strong> ${decimalA} - ${decimalB} = ${decimalResult}</div>
                  </div>`;
         }
 
@@ -1851,9 +2106,11 @@
                  </div>`;
         }
 
+
+
         // Start with an example
         document.getElementById('inputNumber').value = '42';
         convertNumber();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'968bc8d864055a20',t:'MTc1NDExODkzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'968d7ac7c59ca908',t:'MTc1NDEzNjcwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
