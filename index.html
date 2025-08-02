@@ -431,7 +431,7 @@
                         
                         <div class="form-group">
                             <label>Type your number here:</label>
-                            <input type="text" id="inputNumber" placeholder="Try: 42" class="form-input">
+                            <input type="text" id="inputNumber" placeholder="Try: 42 or 1.001" class="form-input">
                         </div>
                         
                         <div class="form-group">
@@ -1069,6 +1069,12 @@
             }
             
             try {
+                // Check if input has decimal point
+                if (input.includes('.')) {
+                    convertDecimalNumber(input, inputBase);
+                    return;
+                }
+                
                 // Validate input
                 if (!isValidInput(input, inputBase)) {
                     return;
@@ -1104,10 +1110,10 @@
 
         function isValidInput(input, base) {
             const patterns = {
-                2: /^[01]+$/,
-                8: /^[0-7]+$/,
-                10: /^\d+$/,
-                16: /^[0-9A-Fa-f]+$/
+                2: /^[01]+(\.[01]+)?$/,
+                8: /^[0-7]+(\.[0-7]+)?$/,
+                10: /^\d+(\.\d+)?$/,
+                16: /^[0-9A-Fa-f]+(\.[0-9A-Fa-f]+)?$/
             };
             
             const messages = {
@@ -1122,6 +1128,94 @@
                 return false;
             }
             return true;
+        }
+
+        function convertDecimalNumber(input, inputBase) {
+            // Validate input format
+            if (!isValidInput(input, inputBase)) {
+                return;
+            }
+            
+            const [integerPart, fractionalPart] = input.split('.');
+            
+            // Convert integer part
+            let decimalInteger = parseInt(integerPart, inputBase);
+            
+            // Convert fractional part
+            let decimalFractional = 0;
+            if (fractionalPart) {
+                for (let i = 0; i < fractionalPart.length; i++) {
+                    const digit = fractionalPart[i];
+                    const digitValue = inputBase === 16 && isNaN(digit) ? 
+                        digit.toUpperCase().charCodeAt(0) - 55 : parseInt(digit);
+                    decimalFractional += digitValue * Math.pow(inputBase, -(i + 1));
+                }
+            }
+            
+            const totalDecimal = decimalInteger + decimalFractional;
+            
+            // Show decimal result
+            document.getElementById('decimalResult').textContent = totalDecimal.toFixed(6);
+            
+            // Convert to other bases
+            const binaryResult = convertDecimalToBase(totalDecimal, 2);
+            document.getElementById('binaryResult').textContent = binaryResult;
+            document.getElementById('binarySteps').textContent = getDecimalSteps(totalDecimal, 2);
+            
+            const octalResult = convertDecimalToBase(totalDecimal, 8);
+            document.getElementById('octalResult').textContent = octalResult;
+            document.getElementById('octalSteps').textContent = getDecimalSteps(totalDecimal, 8);
+            
+            const hexResult = convertDecimalToBase(totalDecimal, 16);
+            document.getElementById('hexResult').textContent = hexResult;
+            document.getElementById('hexSteps').textContent = getDecimalSteps(totalDecimal, 16);
+        }
+
+        function convertDecimalToBase(decimal, base) {
+            const integerPart = Math.floor(decimal);
+            const fractionalPart = decimal - integerPart;
+            
+            // Convert integer part
+            let integerResult = integerPart.toString(base).toUpperCase();
+            
+            // Convert fractional part
+            let fractionalResult = '';
+            let temp = fractionalPart;
+            let precision = 6; // Limit to 6 decimal places
+            
+            while (temp > 0 && precision > 0) {
+                temp *= base;
+                const digit = Math.floor(temp);
+                fractionalResult += base === 16 && digit > 9 ? 
+                    String.fromCharCode(55 + digit) : digit.toString();
+                temp -= digit;
+                precision--;
+            }
+            
+            return fractionalResult ? `${integerResult}.${fractionalResult}` : integerResult;
+        }
+
+        function getDecimalSteps(decimal, base) {
+            const integerPart = Math.floor(decimal);
+            const fractionalPart = decimal - integerPart;
+            
+            let steps = `Integer part: ${integerPart} → ${integerPart.toString(base).toUpperCase()}`;
+            
+            if (fractionalPart > 0) {
+                steps += ` | Fractional part: multiply by ${base} repeatedly`;
+                let temp = fractionalPart;
+                let count = 0;
+                while (temp > 0 && count < 3) {
+                    temp *= base;
+                    const digit = Math.floor(temp);
+                    steps += ` → ${temp.toFixed(3)} (take ${digit})`;
+                    temp -= digit;
+                    count++;
+                }
+                if (temp > 0) steps += ' → ...';
+            }
+            
+            return steps;
         }
 
         function getSimpleSteps(decimal, base, operation) {
@@ -1761,5 +1855,5 @@
         document.getElementById('inputNumber').value = '42';
         convertNumber();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'968b56d735833d54',t:'MTc1NDExNDI2Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'968bc8d864055a20',t:'MTc1NDExODkzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
