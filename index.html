@@ -739,13 +739,13 @@
                         <h3>📝 Enter Binary Numbers</h3>
                         
                         <div class="form-group">
-                            <label>First number (only 0s and 1s):</label>
-                            <input type="text" id="binary1" placeholder="Try: 1010" class="form-input">
+                            <label>First number (0s, 1s, and decimal points):</label>
+                            <input type="text" id="binary1" placeholder="Try: 1010.11" class="form-input">
                         </div>
                         
                         <div class="form-group">
-                            <label>Second number (only 0s and 1s):</label>
-                            <input type="text" id="binary2" placeholder="Try: 1100" class="form-input">
+                            <label>Second number (0s, 1s, and decimal points):</label>
+                            <input type="text" id="binary2" placeholder="Try: 1100.01" class="form-input">
                         </div>
                         
                         <div class="btn-grid">
@@ -791,10 +791,10 @@
                         <p class="text-sm">Step-by-step binary multiplication</p>
                         
                         <div class="form-group">
-                            <input type="text" id="multA" placeholder="Try: 1011" class="form-input text-center">
+                            <input type="text" id="multA" placeholder="Try: 1011.1" class="form-input text-center">
                         </div>
                         <div class="form-group">
-                            <input type="text" id="multB" placeholder="Try: 101" class="form-input text-center">
+                            <input type="text" id="multB" placeholder="Try: 101.01" class="form-input text-center">
                         </div>
                         <button onclick="binaryMultiplication()" class="btn btn-primary btn-full">Show Multiplication Steps</button>
                         
@@ -810,10 +810,10 @@
                         <p class="text-sm">Long division in binary</p>
                         
                         <div class="form-group">
-                            <input type="text" id="divA" placeholder="Try: 1100" class="form-input text-center">
+                            <input type="text" id="divA" placeholder="Try: 1100.1" class="form-input text-center">
                         </div>
                         <div class="form-group">
-                            <input type="text" id="divB" placeholder="Try: 11" class="form-input text-center">
+                            <input type="text" id="divB" placeholder="Try: 11.01" class="form-input text-center">
                         </div>
                         <button onclick="binaryDivision()" class="btn btn-primary btn-full">Show Division Steps</button>
                         
@@ -873,10 +873,10 @@
                         <p class="text-sm">Choose your subtraction method</p>
                         
                         <div class="form-group">
-                            <input type="text" id="subA" placeholder="A: 1100" class="form-input text-center">
+                            <input type="text" id="subA" placeholder="A: 1100.11" class="form-input text-center">
                         </div>
                         <div class="form-group">
-                            <input type="text" id="subB" placeholder="B: 1010" class="form-input text-center">
+                            <input type="text" id="subB" placeholder="B: 1010.01" class="form-input text-center">
                         </div>
                         
                         <div class="btn-grid">
@@ -1070,14 +1070,14 @@
             }
             
             try {
-                // Check if input has decimal point
-                if (input.includes('.')) {
-                    convertDecimalNumber(input, inputBase);
+                // Validate input first
+                if (!isValidInput(input, inputBase)) {
                     return;
                 }
                 
-                // Validate input
-                if (!isValidInput(input, inputBase)) {
+                // Check if input has decimal point
+                if (input.includes('.')) {
+                    convertDecimalNumber(input, inputBase);
                     return;
                 }
                 
@@ -1106,6 +1106,7 @@
                 
             } catch (error) {
                 alert('Something went wrong! Please try again. 😅');
+                console.error('Conversion error:', error);
             }
         }
 
@@ -1242,6 +1243,77 @@
             return steps.join(' → ');
         }
 
+        // Binary conversion functions
+        function convertBinaryToDecimal(binary) {
+            if (!binary || binary === '0') return 0;
+            
+            // Handle negative numbers
+            const isNegative = binary.startsWith('-');
+            if (isNegative) binary = binary.substring(1);
+            
+            const [integerPart, fractionalPart] = binary.split('.');
+            
+            // Convert integer part
+            let decimal = parseInt(integerPart || '0', 2) || 0;
+            
+            // Convert fractional part
+            if (fractionalPart) {
+                for (let i = 0; i < fractionalPart.length; i++) {
+                    if (fractionalPart[i] === '1') {
+                        decimal += Math.pow(2, -(i + 1));
+                    }
+                }
+            }
+            
+            return isNegative ? -decimal : decimal;
+        }
+
+        function convertDecimalToBinary(decimal) {
+            if (decimal === 0) return '0';
+            
+            const isNegative = decimal < 0;
+            decimal = Math.abs(decimal);
+            
+            const integerPart = Math.floor(decimal);
+            const fractionalPart = decimal - integerPart;
+            
+            // Convert integer part
+            let binaryInteger = integerPart === 0 ? '0' : integerPart.toString(2);
+            
+            // Convert fractional part
+            let binaryFractional = '';
+            if (fractionalPart > 0) {
+                let temp = fractionalPart;
+                let precision = 10; // Increased precision
+                
+                while (temp > 0 && precision > 0) {
+                    temp *= 2;
+                    if (temp >= 1) {
+                        binaryFractional += '1';
+                        temp -= 1;
+                    } else {
+                        binaryFractional += '0';
+                    }
+                    precision--;
+                }
+                
+                // Remove trailing zeros
+                binaryFractional = binaryFractional.replace(/0+$/, '');
+            }
+            
+            const result = binaryFractional ? `${binaryInteger}.${binaryFractional}` : binaryInteger;
+            return isNegative ? `-${result}` : result;
+        }
+
+        // Alias functions for compatibility
+        function binaryToDecimal(binary) {
+            return convertBinaryToDecimal(binary);
+        }
+
+        function decimalToBinary(decimal) {
+            return convertDecimalToBinary(decimal);
+        }
+
         function binaryMath(operation) {
             const binary1 = document.getElementById('binary1').value.trim();
             const binary2 = document.getElementById('binary2').value.trim();
@@ -1251,13 +1323,14 @@
                 return;
             }
             
-            if (!/^[01]+$/.test(binary1) || !/^[01]+$/.test(binary2)) {
-                alert('Binary numbers can only have 0s and 1s! 💻');
+            // Support negative binary numbers and decimal points
+            if (!/^-?[01]+(\.[01]+)?$/.test(binary1) || !/^-?[01]+(\.[01]+)?$/.test(binary2)) {
+                alert('Binary numbers can only have 0s, 1s, decimal points, and minus sign! 💻');
                 return;
             }
             
-            const decimal1 = parseInt(binary1, 2);
-            const decimal2 = parseInt(binary2, 2);
+            const decimal1 = convertBinaryToDecimal(binary1);
+            const decimal2 = convertBinaryToDecimal(binary2);
             let result, operationText, symbol;
             
             switch (operation) {
@@ -1278,7 +1351,7 @@
                         alert('Cannot divide by zero! 🚫');
                         return;
                     }
-                    result = Math.floor(decimal1 / decimal2);
+                    result = decimal1 / decimal2;
                     symbol = '÷';
                     break;
                 default:
@@ -1287,11 +1360,11 @@
             }
             
             operationText = `${binary1} ${symbol} ${binary2}`;
-            const binaryResult = result >= 0 ? result.toString(2) : `-(${Math.abs(result).toString(2)})`;
+            const binaryResult = convertDecimalToBinary(result);
             
             document.getElementById('mathOperation').textContent = operationText;
             document.getElementById('binaryMathResult').textContent = binaryResult;
-            document.getElementById('decimalMathResult').textContent = result;
+            document.getElementById('decimalMathResult').textContent = result.toFixed(8).replace(/\.?0+$/, '');
             
             // Show steps for all operations
             document.getElementById('mathSteps').style.display = 'block';
@@ -1307,20 +1380,42 @@
         }
 
         function getMultiplicationSteps(binary1, binary2) {
-            const decimal1 = parseInt(binary1, 2);
-            const decimal2 = parseInt(binary2, 2);
+            // Handle decimal binary multiplication
+            if (binary1.includes('.') || binary2.includes('.')) {
+                const decimal1 = convertBinaryToDecimal(binary1);
+                const decimal2 = convertBinaryToDecimal(binary2);
+                const result = decimal1 * decimal2;
+                const binaryResult = convertDecimalToBinary(result);
+                
+                return `<div class="code-display">
+                    <div><strong>Binary Decimal Multiplication:</strong></div>
+                    <div>Step 1: Convert to decimal</div>
+                    <div>${binary1} = ${decimal1.toFixed(8).replace(/\.?0+$/, '')}</div>
+                    <div>${binary2} = ${decimal2.toFixed(8).replace(/\.?0+$/, '')}</div>
+                    <div>Step 2: Multiply decimals</div>
+                    <div>${decimal1.toFixed(8).replace(/\.?0+$/, '')} × ${decimal2.toFixed(8).replace(/\.?0+$/, '')} = ${result.toFixed(8).replace(/\.?0+$/, '')}</div>
+                    <div>Step 3: Convert back to binary</div>
+                    <div>${result.toFixed(8).replace(/\.?0+$/, '')} = ${binaryResult}</div>
+                </div>`;
+            }
+            
+            // Handle integer binary multiplication
+            const cleanBinary1 = binary1.replace('-', '');
+            const cleanBinary2 = binary2.replace('-', '');
+            const decimal1 = parseInt(cleanBinary1, 2);
+            const decimal2 = parseInt(cleanBinary2, 2);
             
             let steps = `<div class="code-display">`;
             steps += `<div style="text-align: right; margin-bottom: 10px;">`;
-            steps += `<div>  ${binary1.padStart(8, ' ')}</div>`;
-            steps += `<div>× ${binary2.padStart(8, ' ')}</div>`;
+            steps += `<div>  ${cleanBinary1.padStart(8, ' ')}</div>`;
+            steps += `<div>× ${cleanBinary2.padStart(8, ' ')}</div>`;
             steps += `<div>${'─'.repeat(10)}</div>`;
             
             let partialProducts = [];
-            for (let i = binary2.length - 1; i >= 0; i--) {
-                if (binary2[i] === '1') {
-                    const shift = binary2.length - 1 - i;
-                    const product = binary1 + '0'.repeat(shift);
+            for (let i = cleanBinary2.length - 1; i >= 0; i--) {
+                if (cleanBinary2[i] === '1') {
+                    const shift = cleanBinary2.length - 1 - i;
+                    const product = cleanBinary1 + '0'.repeat(shift);
                     partialProducts.push(product);
                     steps += `<div>${product.padStart(10, ' ')}</div>`;
                 }
@@ -1335,14 +1430,36 @@
         }
 
         function getDivisionSteps(binary1, binary2) {
-            const decimal1 = parseInt(binary1, 2);
-            const decimal2 = parseInt(binary2, 2);
+            // Handle decimal binary division
+            if (binary1.includes('.') || binary2.includes('.')) {
+                const decimal1 = convertBinaryToDecimal(binary1);
+                const decimal2 = convertBinaryToDecimal(binary2);
+                const result = decimal1 / decimal2;
+                const binaryResult = convertDecimalToBinary(result);
+                
+                return `<div class="code-display">
+                    <div><strong>Binary Decimal Division:</strong></div>
+                    <div>Step 1: Convert to decimal</div>
+                    <div>${binary1} = ${decimal1.toFixed(8).replace(/\.?0+$/, '')}</div>
+                    <div>${binary2} = ${decimal2.toFixed(8).replace(/\.?0+$/, '')}</div>
+                    <div>Step 2: Divide decimals</div>
+                    <div>${decimal1.toFixed(8).replace(/\.?0+$/, '')} ÷ ${decimal2.toFixed(8).replace(/\.?0+$/, '')} = ${result.toFixed(8).replace(/\.?0+$/, '')}</div>
+                    <div>Step 3: Convert back to binary</div>
+                    <div>${result.toFixed(8).replace(/\.?0+$/, '')} = ${binaryResult}</div>
+                </div>`;
+            }
+            
+            // Handle integer binary division
+            const cleanBinary1 = binary1.replace('-', '');
+            const cleanBinary2 = binary2.replace('-', '');
+            const decimal1 = parseInt(cleanBinary1, 2);
+            const decimal2 = parseInt(cleanBinary2, 2);
             const quotient = Math.floor(decimal1 / decimal2);
             const remainder = decimal1 % decimal2;
             
             return `<div class="code-display">
-                <div><strong>Long Division Steps:</strong></div>
-                <div>${binary1} ÷ ${binary2}</div>
+                <div><strong>Binary Integer Division:</strong></div>
+                <div>${cleanBinary1} ÷ ${cleanBinary2}</div>
                 <div>Quotient: ${quotient.toString(2)}</div>
                 <div>Remainder: ${remainder.toString(2)}</div>
                 <div style="margin-top: 10px; color: #10b981;">
@@ -1352,9 +1469,31 @@
         }
 
         function getAdditionSteps(binary1, binary2) {
-            const maxLen = Math.max(binary1.length, binary2.length);
-            const A = binary1.padStart(maxLen, '0');
-            const B = binary2.padStart(maxLen, '0');
+            // Handle decimal binary addition
+            if (binary1.includes('.') || binary2.includes('.')) {
+                const decimal1 = convertBinaryToDecimal(binary1);
+                const decimal2 = convertBinaryToDecimal(binary2);
+                const result = decimal1 + decimal2;
+                const binaryResult = convertDecimalToBinary(result);
+                
+                return `<div class="code-display">
+                    <div><strong>Binary Decimal Addition:</strong></div>
+                    <div>Step 1: Convert to decimal</div>
+                    <div>${binary1} = ${decimal1.toFixed(8).replace(/\.?0+$/, '')}</div>
+                    <div>${binary2} = ${decimal2.toFixed(8).replace(/\.?0+$/, '')}</div>
+                    <div>Step 2: Add decimals</div>
+                    <div>${decimal1.toFixed(8).replace(/\.?0+$/, '')} + ${decimal2.toFixed(8).replace(/\.?0+$/, '')} = ${result.toFixed(8).replace(/\.?0+$/, '')}</div>
+                    <div>Step 3: Convert back to binary</div>
+                    <div>${result.toFixed(8).replace(/\.?0+$/, '')} = ${binaryResult}</div>
+                </div>`;
+            }
+            
+            // Handle integer binary addition
+            const cleanBinary1 = binary1.replace('-', '');
+            const cleanBinary2 = binary2.replace('-', '');
+            const maxLen = Math.max(cleanBinary1.length, cleanBinary2.length);
+            const A = cleanBinary1.padStart(maxLen, '0');
+            const B = cleanBinary2.padStart(maxLen, '0');
             
             let result = '';
             let carry = 0;
@@ -1387,13 +1526,35 @@
         }
 
         function getSubtractionSteps(binary1, binary2) {
-            const decimal1 = parseInt(binary1, 2);
-            const decimal2 = parseInt(binary2, 2);
+            // Handle decimal binary subtraction
+            if (binary1.includes('.') || binary2.includes('.')) {
+                const decimal1 = convertBinaryToDecimal(binary1);
+                const decimal2 = convertBinaryToDecimal(binary2);
+                const result = decimal1 - decimal2;
+                const binaryResult = convertDecimalToBinary(result);
+                
+                return `<div class="code-display">
+                    <div><strong>Binary Decimal Subtraction:</strong></div>
+                    <div>Step 1: Convert to decimal</div>
+                    <div>${binary1} = ${decimal1.toFixed(8).replace(/\.?0+$/, '')}</div>
+                    <div>${binary2} = ${decimal2.toFixed(8).replace(/\.?0+$/, '')}</div>
+                    <div>Step 2: Subtract decimals</div>
+                    <div>${decimal1.toFixed(8).replace(/\.?0+$/, '')} - ${decimal2.toFixed(8).replace(/\.?0+$/, '')} = ${result.toFixed(8).replace(/\.?0+$/, '')}</div>
+                    <div>Step 3: Convert back to binary</div>
+                    <div>${result.toFixed(8).replace(/\.?0+$/, '')} = ${binaryResult}</div>
+                </div>`;
+            }
+            
+            // Handle integer binary subtraction
+            const cleanBinary1 = binary1.replace('-', '');
+            const cleanBinary2 = binary2.replace('-', '');
+            const decimal1 = parseInt(cleanBinary1, 2);
+            const decimal2 = parseInt(cleanBinary2, 2);
             
             if (decimal1 < decimal2) {
                 return `<div class="code-display">
                     <div><strong>Binary Subtraction:</strong></div>
-                    <div>${binary1} - ${binary2}</div>
+                    <div>${cleanBinary1} - ${cleanBinary2}</div>
                     <div style="color: #ef4444;">Result is negative: -(${(decimal2 - decimal1).toString(2)})</div>
                     <div style="margin-top: 10px; color: #10b981;">
                         For negative results, use 2's complement method!
@@ -1401,9 +1562,9 @@
                 </div>`;
             }
             
-            const maxLen = Math.max(binary1.length, binary2.length);
-            const A = binary1.padStart(maxLen, '0');
-            const B = binary2.padStart(maxLen, '0');
+            const maxLen = Math.max(cleanBinary1.length, cleanBinary2.length);
+            const A = cleanBinary1.padStart(maxLen, '0');
+            const B = cleanBinary2.padStart(maxLen, '0');
             
             let result = '';
             let borrow = 0;
@@ -1444,37 +1605,108 @@
             const inputA = document.getElementById('multA').value.trim();
             const inputB = document.getElementById('multB').value.trim();
             
-            if (!inputA || !inputB || !/^[01]+$/.test(inputA) || !/^[01]+$/.test(inputB)) {
-                alert('Please enter valid binary numbers (only 0s and 1s)! 💻');
+            if (!inputA || !inputB) {
+                alert('Please enter both binary numbers! 💻');
                 return;
             }
             
-            const decimalA = parseInt(inputA, 2);
-            const decimalB = parseInt(inputB, 2);
-            const result = decimalA * decimalB;
-            const binaryResult = result.toString(2);
-            
-            let steps = `<h4>Step-by-Step Binary Multiplication:</h4>`;
-            steps += `<div class="code-display" style="text-align: right;">`;
-            steps += `<div>    ${inputA}</div>`;
-            steps += `<div>×   ${inputB}</div>`;
-            steps += `<div>${'─'.repeat(Math.max(inputA.length, inputB.length) + 4)}</div>`;
-            
-            // Show partial products
-            let partialProducts = [];
-            for (let i = inputB.length - 1; i >= 0; i--) {
-                if (inputB[i] === '1') {
-                    const shift = inputB.length - 1 - i;
-                    const product = inputA + '0'.repeat(shift);
-                    partialProducts.push(product);
-                    steps += `<div>${product.padStart(inputA.length + inputB.length, ' ')}</div>`;
-                }
+            if (!/^-?[01]+(\.[01]+)?$/.test(inputA) || !/^-?[01]+(\.[01]+)?$/.test(inputB)) {
+                alert('Please enter valid binary numbers (0s, 1s, decimal points, and minus sign)! 💻');
+                return;
             }
             
-            steps += `<div>${'─'.repeat(Math.max(inputA.length, inputB.length) + 4)}</div>`;
-            steps += `<div>${binaryResult.padStart(inputA.length + inputB.length, ' ')}</div>`;
+            const decimalA = convertBinaryToDecimal(inputA);
+            const decimalB = convertBinaryToDecimal(inputB);
+            const result = decimalA * decimalB;
+            const binaryResult = convertDecimalToBinary(result);
+            
+            let steps = `<h4>Binary Multiplication: ${inputA} × ${inputB}</h4>`;
+            steps += `<div class="code-display">`;
+            
+            // Handle negative numbers
+            const isNegativeA = inputA.startsWith('-');
+            const isNegativeB = inputB.startsWith('-');
+            const resultIsNegative = isNegativeA !== isNegativeB;
+            
+            const cleanA = inputA.replace('-', '');
+            const cleanB = inputB.replace('-', '');
+            
+            // For decimal binary numbers, show the conversion approach
+            if (cleanA.includes('.') || cleanB.includes('.')) {
+                steps += `<div><strong>Method for decimal binary multiplication:</strong></div>`;
+                steps += `<div>Step 1: Convert to decimal</div>`;
+                steps += `<div>${inputA} = ${decimalA.toFixed(10).replace(/\.?0+$/, '')}</div>`;
+                steps += `<div>${inputB} = ${decimalB.toFixed(10).replace(/\.?0+$/, '')}</div>`;
+                steps += `<div>Step 2: Multiply decimals</div>`;
+                steps += `<div>${decimalA.toFixed(10).replace(/\.?0+$/, '')} × ${decimalB.toFixed(10).replace(/\.?0+$/, '')} = ${result.toFixed(10).replace(/\.?0+$/, '')}</div>`;
+                steps += `<div>Step 3: Convert result back to binary</div>`;
+                steps += `<div>${result.toFixed(10).replace(/\.?0+$/, '')} = ${binaryResult}</div>`;
+                
+                // Show decimal point positioning
+                const decimalPlacesA = (cleanA.split('.')[1] || '').length;
+                const decimalPlacesB = (cleanB.split('.')[1] || '').length;
+                const totalDecimalPlaces = decimalPlacesA + decimalPlacesB;
+                
+                if (totalDecimalPlaces > 0) {
+                    steps += `<br><div><strong>Decimal Point Rule:</strong></div>`;
+                    steps += `<div>Total decimal places: ${decimalPlacesA} + ${decimalPlacesB} = ${totalDecimalPlaces}</div>`;
+                    steps += `<div>Result should have ${totalDecimalPlaces} decimal places</div>`;
+                }
+            } else {
+                // Show partial products for integer binary
+                steps += `<div><strong>Integer Binary Multiplication:</strong></div>`;
+                steps += `<div style="font-family: monospace; text-align: right; margin: 15px 0; background: rgba(0,0,0,0.1); padding: 10px; border-radius: 5px;">`;
+                
+                const maxLen = Math.max(cleanA.length, cleanB.length) + 2;
+                steps += `<div>${cleanA.padStart(maxLen, ' ')}</div>`;
+                steps += `<div>× ${cleanB.padStart(maxLen - 2, ' ')}</div>`;
+                steps += `<div>${'─'.repeat(maxLen)}</div>`;
+                
+                // Show partial products
+                let partialProducts = [];
+                let hasPartialProducts = false;
+                
+                for (let i = cleanB.length - 1; i >= 0; i--) {
+                    if (cleanB[i] === '1') {
+                        const shift = cleanB.length - 1 - i;
+                        const product = cleanA + '0'.repeat(shift);
+                        partialProducts.push(product);
+                        steps += `<div>${product.padStart(maxLen, ' ')}</div>`;
+                        hasPartialProducts = true;
+                    }
+                }
+                
+                if (hasPartialProducts) {
+                    steps += `<div>${'─'.repeat(maxLen)}</div>`;
+                }
+                
+                const finalBinary = binaryResult.replace('-', '');
+                steps += `<div>${finalBinary.padStart(maxLen, ' ')}</div>`;
+                steps += `</div>`;
+                
+                // Explain the process
+                steps += `<div><strong>Process Explanation:</strong></div>`;
+                steps += `<div>• Multiply ${cleanA} by each bit of ${cleanB}</div>`;
+                steps += `<div>• When multiplying by 1: copy the number</div>`;
+                steps += `<div>• When multiplying by 0: result is 0 (not shown)</div>`;
+                steps += `<div>• Shift left for each position</div>`;
+                steps += `<div>• Add all partial products together</div>`;
+            }
+            
+            // Handle sign
+            if (resultIsNegative && result !== 0) {
+                steps += `<br><div><strong>Sign Calculation:</strong></div>`;
+                steps += `<div>${isNegativeA ? 'Negative' : 'Positive'} × ${isNegativeB ? 'Negative' : 'Positive'} = ${resultIsNegative ? 'Negative' : 'Positive'}</div>`;
+            }
+            
+            steps += `<br><div><strong>Final Answer:</strong></div>`;
+            steps += `<div>Binary: ${binaryResult}</div>`;
+            steps += `<div>Decimal: ${result.toFixed(10).replace(/\.?0+$/, '')}</div>`;
+            
+            // Verification
+            steps += `<br><div style="color: #10b981;"><strong>Verification:</strong></div>`;
+            steps += `<div>${decimalA.toFixed(10).replace(/\.?0+$/, '')} × ${decimalB.toFixed(10).replace(/\.?0+$/, '')} = ${result.toFixed(10).replace(/\.?0+$/, '')} ✓</div>`;
             steps += `</div>`;
-            steps += `<p><strong>Decimal check:</strong> ${decimalA} × ${decimalB} = ${result}</p>`;
             
             document.getElementById('multResult').innerHTML = steps;
         }
@@ -1484,31 +1716,129 @@
             const inputA = document.getElementById('divA').value.trim();
             const inputB = document.getElementById('divB').value.trim();
             
-            if (!inputA || !inputB || !/^[01]+$/.test(inputA) || !/^[01]+$/.test(inputB)) {
-                alert('Please enter valid binary numbers (only 0s and 1s)! 💻');
+            if (!inputA || !inputB) {
+                alert('Please enter both binary numbers! 💻');
                 return;
             }
             
-            const decimalA = parseInt(inputA, 2);
-            const decimalB = parseInt(inputB, 2);
+            if (!/^-?[01]+(\.[01]+)?$/.test(inputA) || !/^-?[01]+(\.[01]+)?$/.test(inputB)) {
+                alert('Please enter valid binary numbers (0s, 1s, decimal points, and minus sign)! 💻');
+                return;
+            }
+            
+            const decimalA = convertBinaryToDecimal(inputA);
+            const decimalB = convertBinaryToDecimal(inputB);
             
             if (decimalB === 0) {
                 alert('Cannot divide by zero! 🚫');
                 return;
             }
             
-            const quotient = Math.floor(decimalA / decimalB);
-            const remainder = decimalA % decimalB;
-            const binaryQuotient = quotient.toString(2);
-            const binaryRemainder = remainder.toString(2);
+            const result = decimalA / decimalB;
+            const binaryResult = convertDecimalToBinary(result);
             
-            let steps = `<h4>Binary Long Division:</h4>`;
+            let steps = `<h4>Binary Division: ${inputA} ÷ ${inputB}</h4>`;
             steps += `<div class="code-display">`;
-            steps += `<div><strong>Problem:</strong> ${inputA} ÷ ${inputB}</div><br>`;
-            steps += `<div><strong>Quotient:</strong> ${binaryQuotient}</div>`;
-            steps += `<div><strong>Remainder:</strong> ${binaryRemainder}</div><br>`;
-            steps += `<div style="color: #10b981;"><strong>Check:</strong></div>`;
-            steps += `<div>${quotient} × ${decimalB} + ${remainder} = ${decimalA} ✓</div>`;
+            
+            // Handle negative numbers
+            const isNegativeA = inputA.startsWith('-');
+            const isNegativeB = inputB.startsWith('-');
+            const resultIsNegative = isNegativeA !== isNegativeB;
+            
+            const cleanA = inputA.replace('-', '');
+            const cleanB = inputB.replace('-', '');
+            
+            if (cleanA.includes('.') || cleanB.includes('.')) {
+                // Decimal binary division
+                steps += `<div><strong>Method for decimal binary division:</strong></div>`;
+                steps += `<div>Step 1: Convert to decimal</div>`;
+                steps += `<div>${inputA} = ${decimalA.toFixed(10).replace(/\.?0+$/, '')}</div>`;
+                steps += `<div>${inputB} = ${decimalB.toFixed(10).replace(/\.?0+$/, '')}</div>`;
+                steps += `<div>Step 2: Perform decimal division</div>`;
+                steps += `<div>${decimalA.toFixed(10).replace(/\.?0+$/, '')} ÷ ${decimalB.toFixed(10).replace(/\.?0+$/, '')} = ${result.toFixed(10).replace(/\.?0+$/, '')}</div>`;
+                steps += `<div>Step 3: Convert result back to binary</div>`;
+                steps += `<div>${result.toFixed(10).replace(/\.?0+$/, '')} = ${binaryResult}</div>`;
+            } else {
+                // Integer binary division - show long division method
+                const quotient = Math.floor(Math.abs(decimalA) / Math.abs(decimalB));
+                const remainder = Math.abs(decimalA) % Math.abs(decimalB);
+                const binaryQuotient = quotient.toString(2);
+                const binaryRemainder = remainder.toString(2);
+                
+                steps += `<div><strong>Integer Binary Division (Long Division Method):</strong></div>`;
+                steps += `<div style="font-family: monospace; margin: 15px 0; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 5px;">`;
+                
+                // Show the division setup
+                steps += `<div style="text-align: center; margin-bottom: 10px;">`;
+                steps += `<div>${binaryQuotient}</div>`;
+                steps += `<div>┌${'─'.repeat(Math.max(cleanA.length, binaryQuotient.length))}</div>`;
+                steps += `<div>${cleanB} │ ${cleanA}</div>`;
+                steps += `</div>`;
+                
+                // Show step-by-step division process
+                if (quotient > 0) {
+                    steps += `<div><strong>Division Steps:</strong></div>`;
+                    
+                    // Simple explanation for binary division
+                    let dividend = parseInt(cleanA, 2);
+                    let divisor = parseInt(cleanB, 2);
+                    let currentQuotient = quotient;
+                    
+                    steps += `<div>1. How many times does ${cleanB} (${divisor}) go into ${cleanA} (${dividend})?</div>`;
+                    steps += `<div>2. ${divisor} × ${quotient} = ${divisor * quotient}</div>`;
+                    steps += `<div>3. ${dividend} - ${divisor * quotient} = ${remainder} (remainder)</div>`;
+                    
+                    if (remainder > 0) {
+                        steps += `<div>4. Remainder: ${remainder} = ${binaryRemainder} in binary</div>`;
+                    }
+                } else {
+                    steps += `<div>Since ${cleanA} (${Math.abs(decimalA)}) < ${cleanB} (${Math.abs(decimalB)}), quotient = 0</div>`;
+                }
+                
+                steps += `</div>`;
+                
+                steps += `<div><strong>Result:</strong></div>`;
+                steps += `<div>Quotient: ${binaryQuotient}</div>`;
+                if (remainder > 0) {
+                    steps += `<div>Remainder: ${binaryRemainder}</div>`;
+                    steps += `<div>As decimal: ${quotient} remainder ${remainder}</div>`;
+                }
+                
+                // Show exact division if no remainder
+                if (remainder === 0) {
+                    steps += `<div>Exact division (no remainder)</div>`;
+                } else {
+                    // Show as fraction
+                    const fractionResult = decimalA / decimalB;
+                    steps += `<div>As fraction: ${fractionResult.toFixed(10).replace(/\.?0+$/, '')}</div>`;
+                }
+            }
+            
+            // Handle sign
+            if (resultIsNegative && result !== 0) {
+                steps += `<br><div><strong>Sign Calculation:</strong></div>`;
+                steps += `<div>${isNegativeA ? 'Negative' : 'Positive'} ÷ ${isNegativeB ? 'Negative' : 'Positive'} = ${resultIsNegative ? 'Negative' : 'Positive'}</div>`;
+            }
+            
+            steps += `<br><div><strong>Final Answer:</strong></div>`;
+            steps += `<div>Binary: ${binaryResult}</div>`;
+            steps += `<div>Decimal: ${result.toFixed(10).replace(/\.?0+$/, '')}</div>`;
+            
+            // Verification
+            steps += `<br><div style="color: #10b981;"><strong>Verification:</strong></div>`;
+            steps += `<div>${decimalA.toFixed(10).replace(/\.?0+$/, '')} ÷ ${decimalB.toFixed(10).replace(/\.?0+$/, '')} = ${result.toFixed(10).replace(/\.?0+$/, '')} ✓</div>`;
+            
+            // Show multiplication check for integer division
+            if (!cleanA.includes('.') && !cleanB.includes('.')) {
+                const quotient = Math.floor(Math.abs(decimalA) / Math.abs(decimalB));
+                const remainder = Math.abs(decimalA) % Math.abs(decimalB);
+                if (remainder === 0) {
+                    steps += `<div>Check: ${Math.abs(decimalB)} × ${quotient} = ${Math.abs(decimalA)} ✓</div>`;
+                } else {
+                    steps += `<div>Check: ${Math.abs(decimalB)} × ${quotient} + ${remainder} = ${Math.abs(decimalA)} ✓</div>`;
+                }
+            }
+            
             steps += `</div>`;
             
             document.getElementById('divResult').innerHTML = steps;
@@ -1519,20 +1849,43 @@
             const inputA = document.getElementById('subA').value.trim();
             const inputB = document.getElementById('subB').value.trim();
             
-            if (!inputA || !inputB || !/^[01]+$/.test(inputA) || !/^[01]+$/.test(inputB)) {
-                alert('Please enter valid binary numbers (only 0s and 1s)! 💻');
+            if (!inputA || !inputB) {
+                alert('Please enter both binary numbers! 💻');
                 return;
             }
             
-            const decimalA = parseInt(inputA, 2);
-            const decimalB = parseInt(inputB, 2);
+            if (!/^-?[01]+(\.[01]+)?$/.test(inputA) || !/^-?[01]+(\.[01]+)?$/.test(inputB)) {
+                alert('Please enter valid binary numbers (0s, 1s, decimal points, and minus sign)! 💻');
+                return;
+            }
+            
+            const decimalA = convertBinaryToDecimal(inputA);
+            const decimalB = convertBinaryToDecimal(inputB);
             
             if (decimalA < decimalB) {
                 alert('For direct method, first number should be larger! Try 1\'s or 2\'s complement for negative results. 😊');
                 return;
             }
             
-            // Perform binary subtraction step by step
+            // For decimal binary numbers, show conversion method
+            if (inputA.includes('.') || inputB.includes('.')) {
+                const result = decimalA - decimalB;
+                const binaryResult = convertDecimalToBinary(result);
+                
+                document.getElementById('subResult').innerHTML = 
+                    `<h4>Direct Binary Subtraction: ${inputA} - ${inputB}</h4>
+                     <div class="code-display">
+                         <div><strong>Method for decimal binary subtraction:</strong></div>
+                         <div>1. Convert to decimal: ${inputA} = ${decimalA.toFixed(6).replace(/\.?0+$/, '')}, ${inputB} = ${decimalB.toFixed(6).replace(/\.?0+$/, '')}</div>
+                         <div>2. Subtract: ${decimalA.toFixed(6).replace(/\.?0+$/, '')} - ${decimalB.toFixed(6).replace(/\.?0+$/, '')} = ${result.toFixed(6).replace(/\.?0+$/, '')}</div>
+                         <div>3. Convert back to binary: ${result.toFixed(6).replace(/\.?0+$/, '')} = ${binaryResult}</div>
+                         <br>
+                         <div><strong>Final Result:</strong> ${binaryResult}</div>
+                     </div>`;
+                return;
+            }
+            
+            // For integer binary numbers, show bit-by-bit subtraction
             const maxLen = Math.max(inputA.length, inputB.length);
             const A = inputA.padStart(maxLen, '0');
             const B = inputB.padStart(maxLen, '0');
@@ -1574,18 +1927,27 @@
         function calculateEvenParity() {
             const input = document.getElementById('evenParityInput').value.trim();
             
-            if (!input || !/^[01]+$/.test(input)) {
-                alert('Please enter binary numbers (only 0s and 1s)! 💻');
+            if (!input) {
+                alert('Please enter binary numbers! 💻');
                 return;
             }
             
-            const onesCount = (input.match(/1/g) || []).length;
+            // Allow binary numbers with decimal points, but only count the binary digits
+            if (!/^-?[01]+(\.[01]+)?$/.test(input)) {
+                alert('Please enter binary numbers (0s, 1s, decimal points, and minus sign)! 💻');
+                return;
+            }
+            
+            // Remove decimal point and minus sign for counting 1s
+            const binaryDigits = input.replace(/[\.\-]/g, '');
+            const onesCount = (binaryDigits.match(/1/g) || []).length;
             const parityBit = onesCount % 2 === 0 ? '0' : '1';
             const finalCode = input + parityBit;
             
             document.getElementById('evenParityResult').innerHTML = 
                 `<h4>Even Parity Calculation:</h4>
                  <p><strong>Original data:</strong> ${input}</p>
+                 <p><strong>Binary digits only:</strong> ${binaryDigits}</p>
                  <p><strong>Number of 1s:</strong> ${onesCount}</p>
                  <p><strong>Parity bit needed:</strong> ${parityBit} (to make total even)</p>
                  <p><strong>Final code:</strong> ${finalCode}</p>
@@ -1595,18 +1957,27 @@
         function calculateOddParity() {
             const input = document.getElementById('oddParityInput').value.trim();
             
-            if (!input || !/^[01]+$/.test(input)) {
-                alert('Please enter binary numbers (only 0s and 1s)! 💻');
+            if (!input) {
+                alert('Please enter binary numbers! 💻');
                 return;
             }
             
-            const onesCount = (input.match(/1/g) || []).length;
+            // Allow binary numbers with decimal points, but only count the binary digits
+            if (!/^-?[01]+(\.[01]+)?$/.test(input)) {
+                alert('Please enter binary numbers (0s, 1s, decimal points, and minus sign)! 💻');
+                return;
+            }
+            
+            // Remove decimal point and minus sign for counting 1s
+            const binaryDigits = input.replace(/[\.\-]/g, '');
+            const onesCount = (binaryDigits.match(/1/g) || []).length;
             const parityBit = onesCount % 2 === 1 ? '0' : '1';
             const finalCode = input + parityBit;
             
             document.getElementById('oddParityResult').innerHTML = 
                 `<h4>Odd Parity Calculation:</h4>
                  <p><strong>Original data:</strong> ${input}</p>
+                 <p><strong>Binary digits only:</strong> ${binaryDigits}</p>
                  <p><strong>Number of 1s:</strong> ${onesCount}</p>
                  <p><strong>Parity bit needed:</strong> ${parityBit} (to make total odd)</p>
                  <p><strong>Final code:</strong> ${finalCode}</p>
@@ -1992,8 +2363,36 @@
             const inputA = document.getElementById('subA').value.trim();
             const inputB = document.getElementById('subB').value.trim();
             
-            if (!inputA || !inputB || !/^[01]+$/.test(inputA) || !/^[01]+$/.test(inputB)) {
-                alert('Please enter valid binary numbers (only 0s and 1s)! 💻');
+            if (!inputA || !inputB) {
+                alert('Please enter both binary numbers! 💻');
+                return;
+            }
+            
+            if (!/^-?[01]+(\.[01]+)?$/.test(inputA) || !/^-?[01]+(\.[01]+)?$/.test(inputB)) {
+                alert('Please enter valid binary numbers (0s, 1s, decimal points, and minus sign)! 💻');
+                return;
+            }
+            
+            // Handle decimal binary numbers using conversion method
+            if (inputA.includes('.') || inputB.includes('.')) {
+                const decimalA = convertBinaryToDecimal(inputA);
+                const decimalB = convertBinaryToDecimal(inputB);
+                const result = decimalA - decimalB;
+                const binaryResult = convertDecimalToBinary(result);
+                
+                document.getElementById('subResult').innerHTML = 
+                    `<h4>1's Complement Subtraction: ${inputA} - ${inputB}</h4>
+                     <div class="code-display">
+                         <div><strong>Method for decimal binary subtraction:</strong></div>
+                         <div>1. Convert to decimal: ${inputA} = ${decimalA.toFixed(8).replace(/\.?0+$/, '')}, ${inputB} = ${decimalB.toFixed(8).replace(/\.?0+$/, '')}</div>
+                         <div>2. Subtract: ${decimalA.toFixed(8).replace(/\.?0+$/, '')} - ${decimalB.toFixed(8).replace(/\.?0+$/, '')} = ${result.toFixed(8).replace(/\.?0+$/, '')}</div>
+                         <div>3. Convert back to binary: ${result.toFixed(8).replace(/\.?0+$/, '')} = ${binaryResult}</div>
+                         <br>
+                         <div><strong>Final Result:</strong> ${binaryResult}</div>
+                         <div style="color: #10b981; margin-top: 10px;">
+                             <strong>Note:</strong> For decimal binary numbers, we use decimal conversion method
+                         </div>
+                     </div>`;
                 return;
             }
             
@@ -2057,8 +2456,36 @@
             const inputA = document.getElementById('subA').value.trim();
             const inputB = document.getElementById('subB').value.trim();
             
-            if (!inputA || !inputB || !/^[01]+$/.test(inputA) || !/^[01]+$/.test(inputB)) {
-                alert('Please enter valid binary numbers (only 0s and 1s)! 💻');
+            if (!inputA || !inputB) {
+                alert('Please enter both binary numbers! 💻');
+                return;
+            }
+            
+            if (!/^-?[01]+(\.[01]+)?$/.test(inputA) || !/^-?[01]+(\.[01]+)?$/.test(inputB)) {
+                alert('Please enter valid binary numbers (0s, 1s, decimal points, and minus sign)! 💻');
+                return;
+            }
+            
+            // Handle decimal binary numbers using conversion method
+            if (inputA.includes('.') || inputB.includes('.')) {
+                const decimalA = convertBinaryToDecimal(inputA);
+                const decimalB = convertBinaryToDecimal(inputB);
+                const result = decimalA - decimalB;
+                const binaryResult = convertDecimalToBinary(result);
+                
+                document.getElementById('subResult').innerHTML = 
+                    `<h4>2's Complement Subtraction: ${inputA} - ${inputB}</h4>
+                     <div class="code-display">
+                         <div><strong>Method for decimal binary subtraction:</strong></div>
+                         <div>1. Convert to decimal: ${inputA} = ${decimalA.toFixed(8).replace(/\.?0+$/, '')}, ${inputB} = ${decimalB.toFixed(8).replace(/\.?0+$/, '')}</div>
+                         <div>2. Subtract: ${decimalA.toFixed(8).replace(/\.?0+$/, '')} - ${decimalB.toFixed(8).replace(/\.?0+$/, '')} = ${result.toFixed(8).replace(/\.?0+$/, '')}</div>
+                         <div>3. Convert back to binary: ${result.toFixed(8).replace(/\.?0+$/, '')} = ${binaryResult}</div>
+                         <br>
+                         <div><strong>Final Result:</strong> ${binaryResult}</div>
+                         <div style="color: #10b981; margin-top: 10px;">
+                             <strong>Note:</strong> For decimal binary numbers, we use decimal conversion method
+                         </div>
+                     </div>`;
                 return;
             }
             
@@ -2108,9 +2535,11 @@
 
 
 
+
+
         // Start with an example
         document.getElementById('inputNumber').value = '42';
         convertNumber();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'968d7ac7c59ca908',t:'MTc1NDEzNjcwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9693604c36e359e7',t:'MTc1NDE5ODUzNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
